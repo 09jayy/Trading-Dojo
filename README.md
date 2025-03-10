@@ -2,6 +2,12 @@
 
 A Paper Trading application focused on learning the fundamentals of stocks and shares trading with a built in social messaging platform. Built with React Native + Expo, Powered by Firebase
 
+# Tech Stack
+
+- Expo + React-Native
+- Firebase-JS-SDK
+- ExpressJs
+
 # Dev instructions
 
 ```bash
@@ -25,6 +31,10 @@ cd app # if not already in /Trading-Dojo/app
 npm start
 # ... follow expo instructions
 ```
+
+## Running Server Application
+
+TODO
 
 ## Issues & Troubleshooting
 
