@@ -21,6 +21,7 @@ npm install
 ### Start Application
 
 ```bash
+cd app # if not already in /Trading-Dojo/app
 npm start
 # ... follow expo instructions
 ```
