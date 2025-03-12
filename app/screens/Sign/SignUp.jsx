@@ -1,10 +1,11 @@
 import {View, Text} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
+import { SignTemplate } from './components/SignTemplate';
 
 export const SignUp = () => {
     return (
-        <SafeAreaView>
+        <SignTemplate>
             <Text>Sign up</Text>
-        </SafeAreaView>
+        </SignTemplate>
     )
 }
