@@ -29,3 +29,19 @@ npm start
 ## Issues & Troubleshooting
 
 - Issues relating to the app not starting in Expo Go are usually related to network settings
+
+### Differing IP addresses
+
+Potential issue includes metro waiting on a different IP address from IPv4 local device. To fix, from within windows powershell (as administrator) run:
+
+```bash
+# setx to use same ip after reboot
+setx /M REACT_NATIVE_PACKAGER_HOSTNAME <IPv4-Address>
+```
+
+```bash
+# set used for only one session
+set REACT_NATIVE_PACKAGER_HOSTNAME=<IPv4-Address>
+```
+
+> To check IPv4 Address in windows, navigate to terminal and use `ipconfig` to find listed IPv4 address
