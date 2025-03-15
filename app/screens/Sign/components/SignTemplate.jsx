@@ -9,6 +9,7 @@ export const SignTemplate = ({ buttonLabel, onPress }) => {
         console.log(buttonLabel);
         console.log("email:", email);
         console.log("Password:", password);
+        onPress(email, password);
     };
 
     return (
