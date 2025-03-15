@@ -2,23 +2,23 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
 
 export const SignTemplate = ({ buttonLabel, onPress }) => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
 
-    const signIn = () => {
+    const signpress = () => {
         console.log(buttonLabel);
-        console.log("Username:", username);
+        console.log("email:", email);
         console.log("Password:", password);
-        onPress(true);
+        onPress(email, password);
     };
 
     return (
         <View style={styles.formContainer}>
             <TextInput
                 style={styles.input}
-                placeholder="Username"
-                value={username}
-                onChangeText={setUsername}
+                placeholder="Email"
+                value={email}
+                onChangeText={setEmail}
             />
             
             <TextInput
@@ -29,7 +29,7 @@ export const SignTemplate = ({ buttonLabel, onPress }) => {
                 secureTextEntry={true}
             />
 
-            <TouchableOpacity style={styles.button} onPress={signIn}>
+            <TouchableOpacity style={styles.button} onPress={signpress}>
                 <Text style={styles.buttonText}>{buttonLabel}</Text>
             </TouchableOpacity>
         </View>
