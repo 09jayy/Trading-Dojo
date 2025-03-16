@@ -14,7 +14,7 @@ export const SignIn = () => {
     const navigation = useNavigation();
 
     const signIn = () => {
-        console.log("username: ", username);
+        console.log("username: ", username); // replace with sign in functionality when the time comes
         console.log("password: ", password);
         setSignedIn(true);
     }

@@ -10,13 +10,12 @@ export const SignUp = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const navigation = useNavigation();
-
     const buttonLabel = "Sign Up";
     const { setSignedIn } = useContext(signedInContext); // change to sign up when logic is implemented also change signUp function
+    const navigation = useNavigation();
 
     const signUp = () => {
-        console.log("username: ", username);
+        console.log("username: ", username); // replace with sign up functionality when the time comes
         console.log("email: ", email);
         console.log("password: ", password);
         console.log("passwordConfirmation: ", passwordConfirmation);
