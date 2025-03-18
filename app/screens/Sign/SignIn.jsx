@@ -45,9 +45,7 @@ export const SignIn = () => {
 
                 <Text style={styles.bottomText}>
                     Don't have an account?{' '}
-                    <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
-                        <Text style={styles.link}>Sign up</Text>
-                    </TouchableOpacity>
+                    <Text style={styles.link} onPress={() => navigation.navigate("SignUp")}>Sign up</Text>
                 </Text>
             </View>
         </SafeAreaView>

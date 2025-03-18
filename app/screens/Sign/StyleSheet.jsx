@@ -42,6 +42,6 @@ export const styles = StyleSheet.create({
     link: {
         color: '#0041a8',
         fontSize: 14,
-        marginBottom: -5,
+        backgroundColor: 'transparent', 
     },
 });
