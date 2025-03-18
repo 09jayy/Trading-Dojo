@@ -4,12 +4,12 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { SignTemplate } from './components/SignTemplate';
 import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
-
+import { styles } from './StyleSheet';
 
 export const SignIn = () => {
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-    const buttonLabel = "Sign In";
+    const buttonLabel = "SIGN IN";
     const { setSignedIn } = useContext(signedInContext);
     const navigation = useNavigation();
 
@@ -26,14 +26,14 @@ export const SignIn = () => {
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Username"
+                    placeholder="Username..."
                     value={username}
                     onChangeText={setUsername}
                 />
                 
                 <TextInput
                     style={styles.input}
-                    placeholder="Password"
+                    placeholder="Password..."
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
@@ -53,51 +53,3 @@ export const SignIn = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '90%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    formContainer: {
-        width: '100%',
-        marginTop: 40,
-        alignItems: 'center',
-    },
-    input: {
-        width: '84%',
-        height: 50,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginBottom: 15,
-        paddingHorizontal: 15,
-        fontSize: 16,
-    },
-    button: {
-        width: '84%',
-        backgroundColor: '#0041a8',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    bottomText: {
-        marginTop: 20,
-        fontSize: 18,
-    },
-    link: {
-        color: '#0041a8',
-        fontSize: 18,
-        marginBottom: -5,
-    },
-});

@@ -4,13 +4,14 @@ import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-nativ
 import { SignTemplate } from './components/SignTemplate';
 import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
+import { styles } from './StyleSheet';
 
 export const SignUp = () => {
     const [username, setUsername] = useState('');
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
-    const buttonLabel = "Sign Up";
+    const buttonLabel = "SIGN UP";
     const { setSignedIn } = useContext(signedInContext); // change to sign up when logic is implemented also change signUp function
     const navigation = useNavigation();
 
@@ -29,21 +30,21 @@ export const SignUp = () => {
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Username"
+                    placeholder="Username..."
                     value={username}
                     onChangeText={setUsername}
                 />
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Email"
+                    placeholder="Email..."
                     value={email}
                     onChangeText={setEmail}
                 />
                 
                 <TextInput
                     style={styles.input}
-                    placeholder="Password"
+                    placeholder="Password..."
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
@@ -51,7 +52,7 @@ export const SignUp = () => {
 
                 <TextInput
                     style={styles.input}
-                    placeholder="Confirm Password"
+                    placeholder="Confirm Password..."
                     value={passwordConfirmation}
                     onChangeText={setPassword}
                     secureTextEntry={true}
@@ -71,51 +72,3 @@ export const SignUp = () => {
         </SafeAreaView>
     );
 };
-
-const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        height: '90%',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-    },
-    formContainer: {
-        width: '100%',
-        marginTop: 40,
-        alignItems: 'center',
-    },
-    input: {
-        width: '84%',
-        height: 50,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginBottom: 15,
-        paddingHorizontal: 15,
-        fontSize: 16,
-    },
-    button: {
-        width: '84%',
-        backgroundColor: '#0041a8',
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-    bottomText: {
-        marginTop: 20,
-        fontSize: 18,
-    },
-    link: {
-        color: '#0041a8',
-        fontSize: 18,
-        marginBottom: -5,
-    },
-});
