@@ -1,4 +1,5 @@
-import {useState} from 'react'
+import {useState} from 'react';
+import { StatusBar } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { signedInContext } from './AppContext';
@@ -14,6 +15,8 @@ export default function App() {
   
   return (
     <signedInContext.Provider value={{signedIn,setSignedIn}}>
+      <StatusBar barStyle='light-content' backgroundColor='black' translucent={true}/>
+
       <NavigationContainer>
         {
           signedIn == false ? (
