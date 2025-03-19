@@ -5,13 +5,15 @@ import { AlphaVantageApiService } from './AlphaVantageApiService';
 
 export class StockApiCallBuilder{
     apiService: ApiService | null; 
-    apiKey: string | null; 
+    apiKey: string | null;
+    secretKey: string | null;  
     baseUri: string | null; 
     params: Record<string,any> | null; 
 
     constructor(){
         this.apiService = null; 
         this.apiKey = null; 
+        this.secretKey = null; 
         this.baseUri = null; 
         this.params = null; 
     }
@@ -31,6 +33,22 @@ export class StockApiCallBuilder{
                 break; 
             }
         }
+    }
+
+    setApiKey(key: string) : void {
+        this.apiKey = key; 
+    }
+
+    setSecretKey(key: string) : void {
+        this.secretKey = key; 
+    }
+
+    setBaseUri(uri: string) : void {
+        this.baseUri = uri; 
+    }
+
+    setParams(params: Record<string, any>) : void {
+        this.params = params; 
     }
 }
 
