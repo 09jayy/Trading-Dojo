@@ -3,7 +3,8 @@
         "outDir": "./dist", 
         "rootDir": "./shared", 
         "module": "CommonJS",  
-        "target": "ES6",  
-        "strict": true 
+        "target": "es2017",  
+        "strict": true,
+        "esModuleInterop": true,
     }
 }
