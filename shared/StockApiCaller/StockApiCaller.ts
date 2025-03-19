@@ -2,16 +2,26 @@ import {ApiService} from './ApiService';
 import {AlpacaApiService} from './AlpacaApiService'; 
 import {YahooFinanceApiService} from './YahooFinanceApiService';
 import { AlphaVantageApiService } from './AlphaVantageApiService';
+import * as dotenv from 'dotenv'; 
+
+dotenv.config(); 
 
 export class StockApiCallBuilder{
     apiService: ApiService | null; 
-    apiKey: string | null;
-    secretKey: string | null;  
+    private apiKey: string; 
+    private secretKey: string; 
 
     constructor(){
+        if (process.env.API_KEY === undefined) {
+            throw new Error('API_KEY is undefined, set environment variable in .env file'); 
+        }
+        if (process.env.SECRET_KEY === undefined) {
+            throw new Error('SECRET KEY is undefined, set environment variable in .env file'); s
+        }
+
         this.apiService = null; 
-        this.apiKey = null; 
-        this.secretKey = null; 
+        this.apiKey = process.env.API_KEY; 
+        this.secretKey = process.env.SECRET_KEY; 
     }
 
     setApiService(service: 'alpaca' | 'yahoofinance' | 'alphavantage') : void {
@@ -31,12 +41,10 @@ export class StockApiCallBuilder{
         }
     }
 
-    setApiKey(key: string) : void {
-        this.apiKey = key; 
-    }
-
-    setSecretKey(key: string) : void {
-        this.secretKey = key; 
+    fetchCurrentStockPriceOf(symbol: string): number {
+        if (!this.apiService) { throw new Error('api service is not set'); }
+    
+        return this.apiService.fetchCurrentStockPriceOf(symbol, this.apiKey, this.secretKey); 
     }
 }
 
