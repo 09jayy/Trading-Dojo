@@ -9,7 +9,7 @@ import Alpaca from '@alpacahq/alpaca-trade-api';
 export class AlpacaApiService implements ApiService {
     private requestBody(method: 'GET' | 'POST', apiKey: string, secretKey: string): Record<string,any> {
         return {
-            method: 'GET',
+            method: method,
             headers: {
                 'Authorization': `Bearer ${apiKey}`,
                 'APCA-API-KEY-ID': apiKey,
