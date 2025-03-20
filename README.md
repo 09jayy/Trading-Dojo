@@ -40,7 +40,7 @@ TODO
 
 - Issues relating to the app not starting in Expo Go are usually related to network settings
 
-### Differing IP addresses
+### Differing IP addresses (Expo)
 
 Potential issue includes metro waiting on a different IP address from IPv4 local device. To fix, from within windows powershell (as administrator) run:
 
@@ -55,3 +55,15 @@ set REACT_NATIVE_PACKAGER_HOSTNAME=<IPv4-Address>
 ```
 
 > To check IPv4 Address in windows, navigate to terminal and use `ipconfig` to find listed IPv4 address
+
+### Using a Proxy Server as a development server (Expo)
+
+Network related issues can be avoided using a third-party proxy server (though this comes with it's own drawbacks so should be a last resort). This is achieved using **tunnelling**.
+
+```bash
+# Run expo app
+npx expo start
+
+# Run expo app using tunnelling
+npx expo start --tunnel
+```

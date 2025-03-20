@@ -1,68 +1,14 @@
-import React, { useState } from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { React, useContext } from 'react';
+import { Logo } from "../../../components/Logo";
+import { Pressable } from 'react-native';
+import { signedInContext } from '../../../AppContext';
 
-export const SignTemplate = ({ buttonLabel, onPress }) => {
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState('');
-
-    const signpress = () => {
-        console.log(buttonLabel);
-        console.log("email:", email);
-        console.log("Password:", password);
-        onPress(email, password);
-    };
+export const SignTemplate = () => {
+    const { setSignedIn } = useContext(signedInContext);
 
     return (
-        <View style={styles.formContainer}>
-            <TextInput
-                style={styles.input}
-                placeholder="Email"
-                value={email}
-                onChangeText={setEmail}
-            />
-            
-            <TextInput
-                style={styles.input}
-                placeholder="Password"
-                value={password}
-                onChangeText={setPassword}
-                secureTextEntry={true}
-            />
-
-            <TouchableOpacity style={styles.button} onPress={signpress}>
-                <Text style={styles.buttonText}>{buttonLabel}</Text>
-            </TouchableOpacity>
-        </View>
+        <Pressable onPress={() => setSignedIn(true)}>
+            <Logo size={0.6} debug={false} />
+        </Pressable>
     );
 };
-
-const styles = StyleSheet.create({
-    formContainer: {
-        width: '100%',
-        alignItems: 'center',
-        marginTop: 40,
-    },
-    input: {
-        width: '84%',
-        height: 50,
-        borderColor: '#ddd',
-        borderWidth: 1,
-        borderRadius: 10,
-        marginBottom: 15,
-        paddingHorizontal: 15,
-        fontSize: 16,
-    },
-    button: {
-        width: '84%',
-        backgroundColor: 'darkblue', // ask j for hex code in logo
-        padding: 15,
-        borderRadius: 10,
-        alignItems: 'center',
-        marginTop: 20,
-    },
-    buttonText: {
-        color: 'white',
-        fontSize: 18,
-        fontWeight: 'bold',
-    },
-});
