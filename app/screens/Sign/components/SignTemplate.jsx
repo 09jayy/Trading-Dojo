@@ -1,18 +1,14 @@
-import { useContext } from "react";
-import { signedInContext } from "../../../AppContext";
-import { SafeAreaView } from "react-native-safe-area-context";
+import { React, useContext } from 'react';
 import { Logo } from "../../../components/Logo";
-import { Pressable } from "react-native";
+import { Pressable } from 'react-native';
+import { signedInContext } from '../../../AppContext';
 
-export const SignTemplate = ({children}) => {
-    const {setSignedIn} = useContext(signedInContext)
+export const SignTemplate = () => {
+    const { setSignedIn } = useContext(signedInContext);
 
     return (
-        <SafeAreaView>
-            <Pressable onLongPress={()=>setSignedIn(true)}>
-                <Logo size={0.6} debug={true}/>
-            </Pressable>
-            {children}
-        </SafeAreaView>
-    )
-}
+        <Pressable onPress={() => setSignedIn(true)}>
+            <Logo size={0.6} debug={false} />
+        </Pressable>
+    );
+};
