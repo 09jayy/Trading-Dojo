@@ -28,7 +28,7 @@ export class StockApiCaller{
     setApiService(service: 'alpaca' | 'yahoofinance' | 'alphavantage') : StockApiCaller{
         switch(service) {
             case 'alpaca': {
-                this.apiService = new AlpacaApiService(); 
+                this.apiService = new AlpacaApiService(this.apiKey, this.secretKey); 
                 break; 
             }
             case 'yahoofinance': {
@@ -46,13 +46,13 @@ export class StockApiCaller{
     async fetchLatestTradePriceOf(symbol: string): Promise<LatestTrade> {
         if (!this.apiService) { throw new Error('api service is not set'); }
     
-        return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey); 
+        return await this.apiService.fetchLatestTradePriceOf(symbol); 
     }
 
     async fetchLatestQuotePriceOf(symbol: string): Promise<LatestQuote> {
         if (!this.apiService) { throw new Error('api service is not set'); }
     
-        return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey); 
+        return await this.apiService.fetchLatestQuotePriceOf(symbol); 
     }
 }
 
@@ -62,6 +62,6 @@ export class StockApiCaller{
     const data = await caller.fetchLatestTradePriceOf('AAPL');
     const data1 = await caller.fetchLatestQuotePriceOf('AAPL'); 
 
-    console.log(data.trade.tradePrice);
-    console.log(data1.quote.askPrice); 
+    console.log(data.Price);
+    console.log(data1.AskPrice); 
 })();

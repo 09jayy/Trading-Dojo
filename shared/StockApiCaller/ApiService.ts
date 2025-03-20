@@ -1,7 +1,7 @@
 import { LatestTrade, LatestQuote } from "./apiTypes"; 
 
 export interface ApiService {
-    fetchLatestTradePriceOf(symbol: string, apiKey: string, secretKey: string) : Promise<LatestTrade>; 
+    fetchLatestTradePriceOf(symbol: string) : Promise<LatestTrade>; 
 
-    fetchLatestQuotePriceOf(symbol: string, apiKey: string, secretKey: string) : Promise<LatestQuote>; 
+    fetchLatestQuotePriceOf(symbol: string) : Promise<LatestQuote>; 
 }

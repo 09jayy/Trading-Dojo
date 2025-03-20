@@ -12,16 +12,14 @@ export interface AlpacaLatestTrade {
 }
 
 export interface LatestTrade {
-    symbol: string,
-    trade: {
-        timestamp: string,
-        exchange: string,
-        tradePrice: number,
-        tradeSize: number,
-        tradeConditions: [string],
-        tradeId: number,
-        tape: string
-    }
+    Symbol: string, 
+    Timestamp: string,
+    Exchange: string,
+    Price: number,
+    Size: number,
+    Conditions: [string],
+    ID: number,
+    Tape: string
 }
 
 export interface AlpacaLatestQuote {
@@ -39,15 +37,14 @@ export interface AlpacaLatestQuote {
 }
 
 export interface LatestQuote {
-    symbol: string,
-    quote: {
-        timestamp: string,
-        askExchange: string,
-        askPrice: number,
-        askSize: number,
-        bidExchange: string,
-        bidPrice: number,
-        bidSize: number,
-        quoteConditions: [string]
-    }
+    Symbol: string;
+    BidExchange: string;
+    BidPrice: number;
+    BidSize: number;
+    AskExchange: string;
+    AskPrice: number;
+    AskSize: number;
+    Timestamp: string;
+    Conditions: Array<string>;
+    Tape: string;
 }
