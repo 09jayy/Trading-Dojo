@@ -1,0 +1,10 @@
+{
+    "compilerOptions": {
+        "outDir": "./dist", 
+        "rootDir": "./shared", 
+        "module": "CommonJS",  
+        "target": "es2017",  
+        "strict": true,
+        "esModuleInterop": true,
+    }
+}
