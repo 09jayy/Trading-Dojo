@@ -5,6 +5,7 @@ import { SignTemplate } from './components/SignTemplate';
 import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './StyleSheet';
+import { signUp } from './functions/SignUpFunctions';
 
 export const SignUp = () => {
     const [username, setUsername] = useState('');
@@ -14,14 +15,6 @@ export const SignUp = () => {
     const buttonLabel = "SIGN UP";
     const { setSignedIn } = useContext(signedInContext); // change to sign up when logic is implemented also change signUp function
     const navigation = useNavigation();
-
-    const signUp = () => {
-        console.log("username: ", username); // replace with sign up functionality when the time comes
-        console.log("email: ", email);
-        console.log("password: ", password);
-        console.log("passwordConfirmation: ", passwordConfirmation);
-        setSignedIn(true);
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -54,11 +47,11 @@ export const SignUp = () => {
                     style={styles.input}
                     placeholder="Confirm Password..."
                     value={passwordConfirmation}
-                    onChangeText={setPassword}
+                    onChangeText={setPasswordConfirmation}
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={signUp}>
+                <TouchableOpacity style={styles.button} onPress={() => signUp(username, email, password, passwordConfirmation, setSignedIn)}>
                     <Text style={styles.buttonText}>{buttonLabel}</Text>
                 </TouchableOpacity>
 

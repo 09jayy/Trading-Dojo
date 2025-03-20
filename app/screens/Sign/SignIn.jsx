@@ -5,6 +5,7 @@ import { SignTemplate } from './components/SignTemplate';
 import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './StyleSheet';
+import { signIn } from './functions/SignInFunctions';
 
 export const SignIn = () => {
     const [username, setUsername] = useState('');
@@ -12,12 +13,6 @@ export const SignIn = () => {
     const buttonLabel = "SIGN IN";
     const { setSignedIn } = useContext(signedInContext);
     const navigation = useNavigation();
-
-    const signIn = () => {
-        console.log("username: ", username); // replace with sign in functionality when the time comes
-        console.log("password: ", password);
-        setSignedIn(true);
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -39,7 +34,7 @@ export const SignIn = () => {
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={signIn}>
+                <TouchableOpacity style={styles.button} onPress={() => signIn(username, password, setSignedIn)}>
                     <Text style={styles.buttonText}>{buttonLabel}</Text>
                 </TouchableOpacity>
 
