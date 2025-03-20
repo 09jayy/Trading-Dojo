@@ -3,6 +3,7 @@ import {AlpacaApiService} from './AlpacaApiService';
 import {YahooFinanceApiService} from './YahooFinanceApiService';
 import { AlphaVantageApiService } from './AlphaVantageApiService';
 import * as dotenv from 'dotenv'; 
+import { LatestTrade, LatestQuote } from './apiTypes';
 
 dotenv.config(); 
 
@@ -42,10 +43,16 @@ export class StockApiCaller{
         return this; 
     }
 
-    async fetchLatestTradePriceOf(symbol: string): Promise<number> {
+    async fetchLatestTradePriceOf(symbol: string): Promise<LatestTrade> {
         if (!this.apiService) { throw new Error('api service is not set'); }
     
         return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey); 
+    }
+
+    async fetchLatestQuotePriceOf(symbol: string): Promise<LatestQuote> {
+        if (!this.apiService) { throw new Error('api service is not set'); }
+    
+        return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey); 
     }
 }
 
@@ -53,6 +60,8 @@ export class StockApiCaller{
     const caller = new StockApiCaller().setApiService('alpaca'); 
 
     const data = await caller.fetchLatestTradePriceOf('AAPL');
+    const data1 = await caller.fetchLatestQuotePriceOf('AAPL'); 
 
-    console.log(data);
+    console.log(data.trade.tradePrice);
+    console.log(data1.quote.askPrice); 
 })();
