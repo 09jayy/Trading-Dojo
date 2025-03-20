@@ -1,16 +1,14 @@
 import { SafeAreaView } from 'react-native-safe-area-context';
 import {React, useState, useContext} from 'react';
-import { View, Text, TextInput, TouchableOpacity, StyleSheet, Alert } from 'react-native';
+import { View, Text, TextInput, TouchableOpacity } from 'react-native';
 import { SignTemplate } from './components/SignTemplate';
 import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './StyleSheet';
 import { signIn } from './functions/SignInFunctions';
-import { signInWithEmailAndPassword } from 'firebase/auth';
-import { auth } from '../../components/Config/firebaseConfig';
 
 export const SignIn = () => {
-    const [username, setUsername] = useState('');
+    const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const buttonLabel = "SIGN IN";
     const { setSignedIn } = useContext(signedInContext);
@@ -23,9 +21,9 @@ export const SignIn = () => {
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
-                    placeholder="Username..."
-                    value={username}
-                    onChangeText={setUsername}
+                    placeholder="Email..."
+                    value={email}
+                    onChangeText={setEmail}
                 />
                 
                 <TextInput
@@ -36,7 +34,7 @@ export const SignIn = () => {
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={() => signIn(username, password, setSignedIn)}>
+                <TouchableOpacity style={styles.button} onPress={() => signIn(email, password, setSignedIn)}>
                     <Text style={styles.buttonText}>{buttonLabel}</Text>
                 </TouchableOpacity>
 

@@ -2,15 +2,15 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
+import { fireBaseKey, authDomain, projectId, storageBucket, messagingSenderId, appId } from "@env";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyBYkIvFmn4CptRdW1M-pjnhG0tfSzU-NbE",
-  authDomain: "trading-dojo-93b43.firebaseapp.com",
-  projectId: "trading-dojo-93b43",
-  storageBucket: "trading-dojo-93b43.firebasestorage.app",
-  messagingSenderId: "295835900305",
-  appId: "1:295835900305:web:866c860131f539ec282230",
-  measurementId: "G-94M2FMS59T"
+  apiKey: fireBaseKey,
+  authDomain: authDomain,
+  projectId: projectId,
+  storageBucket: storageBucket,
+  messagingSenderId: messagingSenderId,
+  appId: appId
 };
 
 const app = initializeApp(firebaseConfig);
