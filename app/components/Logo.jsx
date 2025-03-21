@@ -15,7 +15,6 @@ export const Logo = ({size, debug=false}) => {
                 ...styles, 
                 width: 2200 / 4 * size,
                 height: 400 / 4 * size, 
-                borderWidth: debug ? 2 : 0
             }
         }/>
     )
