@@ -6,8 +6,8 @@ import { signIn } from '../functions/SignInFunctions';
 
 export const SignTemplate = () => {
     const { setSignedIn } = useContext(signedInContext);
-    const email = ""; // change this to the test user details you make on your firebase
-    const password = "";
+    const email = "user@gmail.com"; // change this to the test user details you make on your firebase
+    const password = "password";
 
     return (
         <Pressable onPress={() => signIn(email, password, setSignedIn)}>
