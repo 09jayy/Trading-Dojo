@@ -1,6 +1,9 @@
 import { Alert } from 'react-native';
 import { auth } from '../../../components/Config/firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { doc, setDoc } from "firebase/firestore";
+import { db } from '../../../components/Config/firebaseConfig';
+import { serverTimestamp } from "firebase/firestore";
 
 export const signUp = (email, password, passwordConfirmation, setter) => {
     console.log("email: ", email);
@@ -17,7 +20,15 @@ export const signUp = (email, password, passwordConfirmation, setter) => {
 
 const handleSignUp = async (email, password, setter) => {
     try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+            name: "", 
+            email: user.email,
+            communities: [],
+            createdAt: serverTimestamp()
+        });
         setter(true);
         console.log("Signed up successfully");
     } catch (error) {

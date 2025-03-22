@@ -6,6 +6,7 @@ import { signedInContext } from './AppContext';
 import { SignIn } from './screens/Sign/SignIn';
 import { SignUp } from './screens/Sign/SignUp';
 import { Dashboard } from './screens/Dashboard/Dashboard';
+import { CommunityView } from './screens/Community/CommunityView';
 import { Ionicons } from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator(); 
@@ -43,6 +44,7 @@ export default function App() {
           ) : (
             <Tab.Navigator>
               <Tab.Screen name='Dashboard' component={Dashboard}/>
+              <Tab.Screen name='Communities' component={CommunityView}/>
             </Tab.Navigator>
           )
         }
