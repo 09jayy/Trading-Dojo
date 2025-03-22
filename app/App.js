@@ -43,7 +43,9 @@ export default function App() {
             </Tab.Navigator>
           ) : (
             <Tab.Navigator>
-              <Tab.Screen name='Dashboard' component={Dashboard}/>
+              <Tab.Screen name='Investments' component={Dashboard}/>
+              <Tab.Screen name='Stock Market' component={Dashboard}/>
+              <Tab.Screen name='Communities' component={Dashboard}/>
               <Tab.Screen name="Profile" component={Profile}/>
             </Tab.Navigator>
           )
