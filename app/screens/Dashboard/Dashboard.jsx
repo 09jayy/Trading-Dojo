@@ -8,10 +8,6 @@ export const Dashboard = () => {
 
     return (
         <SafeAreaView>
-            <Text>Dashboard</Text>
-            <TouchableOpacity onPress={()=>setSignedIn(false)}>
-                <Text>Sign Out</Text>
-            </TouchableOpacity>
         </SafeAreaView>
     )
 }
