@@ -46,5 +46,4 @@ export interface LatestQuote {
     AskSize: number;
     Timestamp: string;
     Conditions: Array<string>;
-    Tape: string;
 }
