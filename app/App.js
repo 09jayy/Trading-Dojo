@@ -44,8 +44,8 @@ export default function App() {
           ) : (
             <Tab.Navigator>
               <Tab.Screen name='Investments' component={Dashboard}/>
-              <Tab.Screen name='Stock Market' component={Dashboard}/>
-              <Tab.Screen name='Communities' component={Dashboard}/>
+              <Tab.Screen name='Stock Market' component={Dashboard}/> {/* This is a placeholder for the stock market screen */}
+              <Tab.Screen name='Communities' component={Dashboard}/>  {/* This is a placeholder for the communities screen */}
               <Tab.Screen name="Profile" component={Profile}/>
             </Tab.Navigator>
           )
