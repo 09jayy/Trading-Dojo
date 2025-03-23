@@ -67,3 +67,21 @@ npx expo start
 # Run expo app using tunnelling
 npx expo start --tunnel
 ```
+
+### ENV Set up
+To avoid publishing information such as API keys we use .env files to protect this data
+
+In your app folder create a new file and name it '.env' this name should be the name in its entirety including the .file type portion
+You should see a cog wheel then the name .env in your app directory now
+
+Next open this file up and write the following
+
+```bash
+fireBaseKey=""
+authDomain=""
+projectId=""
+storageBucket=""
+messagingSenderId=""
+appId=""
+```
+> In the qoutation marks put the appropriate Key or id from the firebase application
