@@ -2,6 +2,7 @@ import { useEffect, useState} from 'react';
 import { StatusBar } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { signedInContext } from './AppContext';
 import { SignIn } from './screens/Sign/SignIn';
 import { SignUp } from './screens/Sign/SignUp';
@@ -10,7 +11,9 @@ import { Ionicons } from '@expo/vector-icons';
 import { Profile } from './screens/Profile/Profile';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
-const Tab = createBottomTabNavigator(); 
+
+const Tab = createBottomTabNavigator();
+const Stack = createNativeStackNavigator(); 
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
