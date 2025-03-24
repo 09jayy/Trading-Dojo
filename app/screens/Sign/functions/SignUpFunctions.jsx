@@ -1,6 +1,7 @@
 import { Alert } from 'react-native';
 import { auth } from '../../../components/Config/firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
+import { signIn } from './SignInFunctions';
 
 export const signUp = (email, password, passwordConfirmation, setter) => {
     console.log("email: ", email);
@@ -18,7 +19,7 @@ export const signUp = (email, password, passwordConfirmation, setter) => {
 const handleSignUp = async (email, password, setter) => {
     try {
         await createUserWithEmailAndPassword(auth, email, password);
-        setter(true);
+        signIn(email, password, setter);
         console.log("Signed up successfully");
     } catch (error) {
         let errorMessage = error.message;
