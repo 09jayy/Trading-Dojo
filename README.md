@@ -77,11 +77,11 @@ You should see a cog wheel then the name .env in your app directory now
 Next open this file up and write the following
 
 ```bash
-fireBaseKey=""
-authDomain=""
-projectId=""
-storageBucket=""
-messagingSenderId=""
-appId=""
+FIREBASE_KEY=
+AUTH_DOMAIN=
+PROJECT_ID=
+STORAGE_BUCKET=
+MESSAGING_SENDER_ID=
+APP_ID=
 ```
-> In the qoutation marks put the appropriate Key or id from the firebase application
+> followed by the corresponding key, leaving no spaces (note auth domain is before project id in this list, make sure you paste the correct key on each line)
