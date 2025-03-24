@@ -16,8 +16,6 @@ const {
   appId
 } = extra;
 
-console.log("✅ Firebase config loaded from:", extra);
-
 const firebaseConfig = {
   apiKey: fireBaseKey,
   authDomain: authDomain,
