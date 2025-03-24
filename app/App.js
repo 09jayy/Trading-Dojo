@@ -1,4 +1,4 @@
-import {useState} from 'react';
+import { useEffect, useState} from 'react';
 import { StatusBar } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -8,11 +8,30 @@ import { SignUp } from './screens/Sign/SignUp';
 import { Dashboard } from './screens/Dashboard/Dashboard';
 import { Ionicons } from '@expo/vector-icons';
 import { Profile } from './screens/Profile/Profile';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const Tab = createBottomTabNavigator(); 
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
+
+  useEffect(() => {
+    const checkIfSignedIn = async () => {
+      try {
+        const user = await AsyncStorage.getItem('user');
+        if (user) {
+          setSignedIn(true);
+          console.log("User session found:", JSON.parse(user));
+        } else {
+          console.log("No user session found");
+        }
+      } catch (error) {
+        console.log("Error: ", error.message);
+      }
+    }
+
+    checkIfSignedIn();
+  }, [])
   
   return (
     <signedInContext.Provider value={{signedIn,setSignedIn}}>

@@ -1,6 +1,8 @@
 import { Alert } from 'react-native';
 import { auth } from '../../../components/Config/firebaseConfig';
 import { signInWithEmailAndPassword } from 'firebase/auth';
+import { getAuth } from 'firebase/auth';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export const signIn = (email, password, setter) => {
     console.log("email: ", email);
@@ -11,7 +13,8 @@ export const signIn = (email, password, setter) => {
 
 const handleSignIn = async (email, password, setter) => {
     try {
-        await signInWithEmailAndPassword(auth, email, password);
+        const user = await signInWithEmailAndPassword(auth, email, password);
+        await AsyncStorage.setItem('user', JSON.stringify(user.user));
         setter(true);
         console.log("Signed in successfully");
     } catch (error) {

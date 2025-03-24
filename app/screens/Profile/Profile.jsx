@@ -3,14 +3,14 @@ import {View, Text, TouchableOpacity, TextInput} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from './ProfileStyles';
 import { signedInContext } from '../../AppContext';
-import { update } from './functions/ProfileFunctions';
+import { update, signOutHandler } from './functions/ProfileFunctions';
 
 export const Profile = () => {
     const {setSignedIn} = useContext(signedInContext)
-    const [email, setEmail] = useState()
-    const [username, setUsername] = useState()
-    const [password, setPassword] = useState()
-    const [confirmPassword, setConfirmPassword] = useState()
+    const [email, setEmail] = useState("")
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [confirmPassword, setConfirmPassword] = useState("")
 
     return (
         <SafeAreaView style={styles.container}>
@@ -59,7 +59,7 @@ export const Profile = () => {
                 <Text style={styles.buttonText}>Save</Text>
             </TouchableOpacity>
 
-            <TouchableOpacity style={styles.button} onPress={()=>setSignedIn(false)}>
+            <TouchableOpacity style={styles.button} onPress={()=>signOutHandler(setSignedIn)}>
                 <Text style={styles.buttonText}>Sign Out</Text>
             </TouchableOpacity>
         </SafeAreaView>
