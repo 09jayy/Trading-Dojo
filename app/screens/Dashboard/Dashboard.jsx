@@ -8,6 +8,7 @@ export const Dashboard = () => {
 
     return (
         <SafeAreaView>
+            <Text>hello world</Text>
         </SafeAreaView>
     )
 }
