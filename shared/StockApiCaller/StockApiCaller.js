@@ -15,8 +15,8 @@ if (typeof require !== 'undefined') {
 class StockApiCaller {
     constructor() {
         this.apiService = null;
-        this.apiKey = '';
-        this.secretKey = '';
+        this.apiKey = null;
+        this.secretKey = null;
     }
 
     setApiKey(apiKey) {
@@ -51,6 +51,11 @@ class StockApiCaller {
         if (!this.apiService) {
             throw new Error('api service is not set');
         }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+
         return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey);
     }
 
@@ -58,6 +63,11 @@ class StockApiCaller {
         if (!this.apiService) {
             throw new Error('api service is not set');
         }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+
         return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey);
     }
 }
@@ -65,11 +75,12 @@ class StockApiCaller {
 module.exports = StockApiCaller;
 
 (async () => {
-    const caller = new StockApiCaller().setApiService('alpaca');
+    const caller = new StockApiCaller()
+        .setApiService('alpaca');
 
     const data = await caller.fetchLatestTradePriceOf('AAPL');
     const data1 = await caller.fetchLatestQuotePriceOf('AAPL');
 
-    console.log(data.trade.exchange);
-    console.log(data1.quote.askPrice);
+    console.log(data);
+    console.log(data1);
 })();
