@@ -10,6 +10,7 @@ import { Dashboard } from './screens/Dashboard/Dashboard';
 import { Glossary } from './screens/Glossary/Glossary';
 import { Ionicons } from '@expo/vector-icons';
 import { Profile } from './screens/Profile/Profile';
+import { StockMarket } from './screens/StockMarket/StockMarket';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -90,7 +91,7 @@ const AuthTabs = () => (
 const MainTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Investments" component={Dashboard} />
-    <Tab.Screen name="Stock Market" component={Dashboard} />
+    <Tab.Screen name="Stock Market" component={StockMarket} />
     <Tab.Screen name="Communities" component={Dashboard} />
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
