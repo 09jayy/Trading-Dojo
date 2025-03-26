@@ -1,7 +1,7 @@
 class IApiService {
-    fetchLatestTradePriceOf(symbol, apiKey, secretKey) {}
+    fetchLatestTradeOf(symbol, apiKey, secretKey) {}
 
-    fetchLatestQuotePriceOf(symbol, apiKey, secretKey) {}
+    fetchLatestQuoteOf(symbol, apiKey, secretKey) {}
 }
 
 module.exports = IApiService;
