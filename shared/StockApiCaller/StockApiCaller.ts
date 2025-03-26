@@ -2,33 +2,33 @@ import {ApiService} from './ApiService';
 import {AlpacaApiService} from './AlpacaApiService'; 
 import {YahooFinanceApiService} from './YahooFinanceApiService';
 import { AlphaVantageApiService } from './AlphaVantageApiService';
-import * as dotenv from 'dotenv'; 
 import { LatestTrade, LatestQuote } from './apiTypes';
 
-dotenv.config(); 
-
-export class StockApiCaller{
+export default class StockApiCaller{
     apiService: ApiService | null; 
     private apiKey: string; 
     private secretKey: string; 
 
     constructor(){
-        if (process.env.API_KEY === undefined) {
-            throw new Error('API_KEY is undefined, set environment variable in .env file'); 
-        }
-        if (process.env.SECRET_KEY === undefined) {
-            throw new Error('SECRET KEY is undefined, set environment variable in .env file');
-        }
-
         this.apiService = null; 
-        this.apiKey = process.env.API_KEY; 
-        this.secretKey = process.env.SECRET_KEY; 
+        this.apiKey = ''; 
+        this.secretKey = ''; 
+    }
+
+    setApiKey(apiKey: string): StockApiCaller{
+        this.apiKey = apiKey;
+        return this;
+    }
+
+    setSecretKey(secretKey: string): StockApiCaller{
+        this.secretKey = secretKey;
+        return this;
     }
 
     setApiService(service: 'alpaca' | 'yahoofinance' | 'alphavantage') : StockApiCaller{
         switch(service) {
             case 'alpaca': {
-                this.apiService = new AlpacaApiService(this.apiKey, this.secretKey); 
+                this.apiService = new AlpacaApiService(); 
                 break; 
             }
             case 'yahoofinance': {
@@ -46,13 +46,13 @@ export class StockApiCaller{
     async fetchLatestTradePriceOf(symbol: string): Promise<LatestTrade> {
         if (!this.apiService) { throw new Error('api service is not set'); }
     
-        return await this.apiService.fetchLatestTradePriceOf(symbol); 
+        return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey); 
     }
 
     async fetchLatestQuotePriceOf(symbol: string): Promise<LatestQuote> {
         if (!this.apiService) { throw new Error('api service is not set'); }
     
-        return await this.apiService.fetchLatestQuotePriceOf(symbol); 
+        return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey); 
     }
 }
 
@@ -62,6 +62,6 @@ export class StockApiCaller{
     const data = await caller.fetchLatestTradePriceOf('AAPL');
     const data1 = await caller.fetchLatestQuotePriceOf('AAPL'); 
 
-    console.log(data.Price);
-    console.log(data1.AskPrice); 
+    console.log(data.trade.exchange);
+    console.log(data1.quote.askPrice); 
 })();

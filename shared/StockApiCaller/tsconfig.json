@@ -1,0 +1,16 @@
+{
+    "compilerOptions": {
+      "outDir": "dist",            // Output folder for compiled JS
+      "module": "ESNext",           // Use modern ES module syntax
+      "target": "ES6",              // Keep modern JavaScript syntax
+      "declaration": false,         // Don't generate .d.ts files
+      "sourceMap": false,           // Don't generate source maps
+      "removeComments": true,       // Minimize file size
+      "skipLibCheck": true,         // Skip type checking of dependencies
+      "noEmit": false,              // Ensure JS files are emitted
+      "noEmitOnError": false,       // Emit files even if there are errors
+      "isolatedModules": true       // Ensure compatibility with Babel
+    },
+    "include": ["./"],             // Include source folder
+    "exclude": ["node_modules", "dist"]
+}  
