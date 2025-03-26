@@ -1,7 +1,20 @@
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
-import { fireBaseKey, authDomain, projectId, storageBucket, messagingSenderId, appId } from "@env";
+import Constants from 'expo-constants';
+
+const extra =
+  Constants.expoConfig?.extra ?? // SDK 49+ (preferred)
+  {};
+
+const {
+  fireBaseKey,
+  projectId,
+  authDomain,
+  storageBucket,
+  messagingSenderId,
+  appId
+} = extra;
 
 const firebaseConfig = {
   apiKey: fireBaseKey,
