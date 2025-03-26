@@ -73,14 +73,3 @@ class StockApiCaller {
 }
 
 module.exports = StockApiCaller;
-
-(async () => {
-    const caller = new StockApiCaller()
-        .setApiService('alpaca');
-
-    const data = await caller.fetchLatestTradePriceOf('AAPL');
-    const data1 = await caller.fetchLatestQuotePriceOf('AAPL');
-
-    console.log(data);
-    console.log(data1);
-})();
