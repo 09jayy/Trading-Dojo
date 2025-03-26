@@ -1,0 +1,75 @@
+let AlpacaApiService, YahooFinanceApiService, AlphaVantageApiService;
+
+if (typeof require !== 'undefined') {
+    // Node.js (CommonJS)
+    AlpacaApiService = require('./AlpacaApiService');
+    YahooFinanceApiService = require('./YahooFinanceApiService');
+    AlphaVantageApiService = require('./AlphaVantageApiService');
+} else {
+    // React Native (ESM)
+    import('./AlpacaApiService').then((module) => AlpacaApiService = module.default);
+    import('./YahooFinanceApiService').then((module) => YahooFinanceApiService = module.default);
+    import('./AlphaVantageApiService').then((module) => AlphaVantageApiService = module.default);
+}
+
+class StockApiCaller {
+    constructor() {
+        this.apiService = null;
+        this.apiKey = null;
+        this.secretKey = null;
+    }
+
+    setApiKey(apiKey) {
+        this.apiKey = apiKey;
+        return this;
+    }
+
+    setSecretKey(secretKey) {
+        this.secretKey = secretKey;
+        return this;
+    }
+
+    setApiService(service) {
+        switch (service) {
+            case 'alpaca': {
+                this.apiService = new AlpacaApiService();
+                break;
+            }
+            case 'yahoofinance': {
+                this.apiService = new YahooFinanceApiService();
+                break;
+            }
+            case 'alphavantage': {
+                this.apiService = new AlphaVantageApiService();
+                break;
+            }
+        }
+        return this;
+    }
+
+    async fetchLatestTradePriceOf(symbol) {
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+
+        return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey);
+    }
+
+    async fetchLatestQuotePriceOf(symbol) {
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+
+        return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey);
+    }
+}
+
+module.exports = StockApiCaller;
