@@ -7,11 +7,11 @@ if (typeof require !== 'undefined') {
 }
 
 class YahooFinanceApiService extends IApiService{
-    async fetchLatestQuotePriceOf(symbol, apiKey, secretKey) {
+    async fetchLatestQuoteOf(symbol, apiKey, secretKey) {
         throw new Error('Method not implemented.');
     }
 
-    async fetchLatestTradePriceOf(symbol, apiKey, secretKey) {
+    async fetchLatestTradeOf(symbol, apiKey, secretKey) {
         throw new Error('Method not implemented.');
     }
 }

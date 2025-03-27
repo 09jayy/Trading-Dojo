@@ -47,7 +47,7 @@ class StockApiCaller {
         return this;
     }
 
-    async fetchLatestTradePriceOf(symbol) {
+    async fetchLatestTradeOf(symbol) {
         if (!this.apiService) {
             throw new Error('api service is not set');
         }
@@ -56,10 +56,10 @@ class StockApiCaller {
             throw new Error('api key or secret key is null');
         }
 
-        return await this.apiService.fetchLatestTradePriceOf(symbol, this.apiKey, this.secretKey);
+        return await this.apiService.fetchLatestTradeOf(symbol, this.apiKey, this.secretKey);
     }
 
-    async fetchLatestQuotePriceOf(symbol) {
+    async fetchLatestQuoteOf(symbol) {
         if (!this.apiService) {
             throw new Error('api service is not set');
         }
@@ -68,7 +68,7 @@ class StockApiCaller {
             throw new Error('api key or secret key is null');
         }
 
-        return await this.apiService.fetchLatestQuotePriceOf(symbol, this.apiKey, this.secretKey);
+        return await this.apiService.fetchLatestQuoteOf(symbol, this.apiKey, this.secretKey);
     }
 }
 
