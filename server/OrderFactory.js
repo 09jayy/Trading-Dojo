@@ -1,0 +1,3 @@
+class OrderFactory {
+    constructor() {}
+}
