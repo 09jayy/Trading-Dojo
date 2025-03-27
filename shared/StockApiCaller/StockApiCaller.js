@@ -70,6 +70,19 @@ class StockApiCaller {
 
         return await this.apiService.fetchLatestQuoteOf(symbol, this.apiKey, this.secretKey);
     }
+
+    /**
+     * 
+     * @param {string} symbol - stock symbol 
+     * @returns {Promise<any> | undefined} - stock stats
+     */
+    async fetchStatsOf(symbol){
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        return await this.apiService.fetchStatsOf(symbol);
+    }
 }
 
 module.exports = StockApiCaller;
