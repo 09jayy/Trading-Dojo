@@ -6,8 +6,14 @@ import { signedInContext } from "../../AppContext";
 import { useNavigation } from '@react-navigation/native';
 import { styles } from './StyleSheet';
 import { signUp } from './functions/SignUpFunctions';
+import { SelectList } from 'react-native-dropdown-select-list'
 
 export const SignUp = () => {
+    const [role, setRole] = useState('');
+    const roles = [
+        { key: 'Trader', value: 'trader' },
+        { key: 'Leader', value: 'leader' }
+    ];
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -20,6 +26,19 @@ export const SignUp = () => {
             <SignTemplate />
             
             <View style={styles.formContainer}>
+                <SelectList 
+                    boxStyles={styles.input}
+                    dropdownStyles={styles.dropdown}
+                    dropdownTextStyles={styles.dropdownText}
+                    inputStyles={styles.dropdownText}
+                    setSelected={(val) => setRole(val)} 
+                    data={roles} 
+                    save="value"
+                    placeholder='Select Role...'
+                    search={false}
+                    maxHeight={90}
+                />
+
                 <TextInput
                     style={styles.input}
                     placeholder="Email..."
@@ -43,7 +62,7 @@ export const SignUp = () => {
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={() => signUp(email, password, passwordConfirmation, setSignedIn)}>
+                <TouchableOpacity style={styles.button} onPress={() => signUp(role, email, password, passwordConfirmation, setSignedIn)}>
                     <Text style={styles.buttonText}>{buttonLabel}</Text>
                 </TouchableOpacity>
 
