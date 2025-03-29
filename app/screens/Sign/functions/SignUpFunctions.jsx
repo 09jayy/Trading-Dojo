@@ -2,6 +2,9 @@ import { Alert } from 'react-native';
 import { auth } from '../../../components/Config/firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signIn } from './SignInFunctions';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from '../../../components/Config/firebaseConfig';
+import { serverTimestamp } from 'firebase/firestore';
 
 export const signUp = (role, email, password, passwordConfirmation, setter) => {
     console.log("role: ", role);
@@ -24,9 +27,17 @@ const handleSignUp = async (role, email, password, setter) => {
     }
 
     try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+            name: "",
+            email: email,
+            role: role,
+            createdAt: serverTimestamp()
+        });
+
         signIn(email, password, setter);
-        // set up user role setter in db
         console.log("Signed up successfully");
     } catch (error) {
         let errorMessage = error.message;
