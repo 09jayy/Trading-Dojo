@@ -18,7 +18,7 @@ export const SignUp = () => {
     const [password, setPassword] = useState('');
     const [passwordConfirmation, setPasswordConfirmation] = useState('');
     const buttonLabel = "SIGN UP";
-    const { setSignedIn } = useContext(signedInContext); // change to sign up when logic is implemented also change signUp function
+    const { setSignedIn } = useContext(signedInContext);
     const navigation = useNavigation();
 
     return (
