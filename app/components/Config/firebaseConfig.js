@@ -2,6 +2,7 @@ import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth } from "firebase/auth";
 import Constants from 'expo-constants';
+import { getFirestore } from "firebase/firestore";
 
 const extra =
   Constants.expoConfig?.extra ?? // SDK 49+ (preferred)
@@ -28,3 +29,4 @@ const firebaseConfig = {
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
 export const auth = getAuth(app);
+export const db = getFirestore(app);

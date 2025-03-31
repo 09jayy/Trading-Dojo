@@ -22,6 +22,14 @@ export const styles = StyleSheet.create({
         paddingHorizontal: 15,
         fontSize: 16,
     },
+    dropdown: {
+        marginBottom: 15,
+        marginTop: 0,
+        borderColor: '#ddd',
+    },
+    dropdownText: {
+        fontSize: 16,
+    },
     button: {
         width: '70%',
         backgroundColor: '#0041a8',

@@ -2,23 +2,41 @@ import { Alert } from 'react-native';
 import { auth } from '../../../components/Config/firebaseConfig';
 import { createUserWithEmailAndPassword } from "firebase/auth";
 import { signIn } from './SignInFunctions';
+import { doc, setDoc } from "firebase/firestore";
+import { db } from '../../../components/Config/firebaseConfig';
+import { serverTimestamp } from 'firebase/firestore';
 
-export const signUp = (email, password, passwordConfirmation, setter) => {
+export const signUp = (role, email, password, passwordConfirmation, setter) => {
+    console.log("role: ", role);
     console.log("email: ", email);
     console.log("password: ", password);
     console.log("passwordConfirmation: ", passwordConfirmation);
-
+    
     if (password === passwordConfirmation) {
-        handleSignUp(email, password, setter);
+        handleSignUp(role, email, password, setter);
     } else {
         console.log("Passwords do not match");
         Alert.alert("Error: ", "Passwords do not match", [{ text: "Understood" , onPress: () => console.log("Alert closed")}]);
     }
 }
 
-const handleSignUp = async (email, password, setter) => {
+const handleSignUp = async (role, email, password, setter) => {
+    if (role === "") {
+        Alert.alert("Error: ", "Please select a role", [{ text: "Understood" }]);
+        return;
+    }
+
     try {
-        await createUserWithEmailAndPassword(auth, email, password);
+        const userCred = await createUserWithEmailAndPassword(auth, email, password);
+        const user = userCred.user;
+        const userRef = doc(db, "users", user.uid);
+        await setDoc(userRef, {
+            name: "",
+            email: email,
+            role: role,
+            createdAt: serverTimestamp()
+        });
+
         signIn(email, password, setter);
         console.log("Signed up successfully");
     } catch (error) {
