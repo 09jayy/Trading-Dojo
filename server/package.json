@@ -10,6 +10,7 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.21.2",
+    "firebase-admin": "^13.2.0",
     "stockapicaller": "file:../shared/StockApiCaller"
   }
 }
