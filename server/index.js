@@ -1,7 +1,18 @@
 const express = require('express')
+const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
+const serviceAccount = require('./serviceAccountKey.json'); 
+const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const StockApiCaller = require('stockapicaller'); 
+
+// initialise express app server
 const app = express()
 const port = 3000
+
+// initialise firebase admin app with service account key
+initializeApp({
+    credential: cert(serviceAccount)
+});
+const db = getFirestore();
 
 app.get('/', (req, res) => {
     res.send('Hello World!')
