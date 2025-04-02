@@ -50,3 +50,20 @@ app.post('/order', async (req, res) => {
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`)
 })
+
+/* STOCK ORDER EXEUCTION */
+cron.schedule('*/5 * * * * *', async () => {
+    console.log('attempting to execute limit stock orders'); 
+
+    const ordersRef = db.collection('Orders')
+    const limitOrderList = await ordersRef.where('limit', '!=', null).get();
+    
+    if (limitOrderList.empty) {
+        console.log('no limit orders to execute'); 
+        return; 
+    }
+
+    limitOrderList.forEach(limitOrder => {
+        console.log(limitOrder); 
+    })
+})
