@@ -4,11 +4,24 @@ const { initializeApp, applicationDefault, cert } = require('firebase-admin/app'
 const serviceAccount = require('./serviceAccountKey.json'); 
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const StockApiCaller = require('stockapicaller'); 
+require('dotenv').config(); 
 
 // initialise express app server
 const app = express()
 const port = 3000
 app.use(express.json()); 
+
+const alpacaApiCaller = new StockApiCaller()
+    .setApiService('alpaca')
+    .setApiKey(process.env.ALPACA_API_KEY)
+    .setSecretKey(process.env.ALPACA_SECRET_KEY);
+
+const orderProcessing = process.argv.includes('enable-order-processing'); 
+if (orderProcessing) {
+    console.log('order processing is enabled') 
+} else {
+    console.log('order processing is disabled')
+}
 
 // initialise firebase admin app with service account key
 initializeApp({
@@ -53,6 +66,11 @@ app.listen(port, () => {
 
 /* STOCK ORDER EXEUCTION */
 cron.schedule('*/5 * * * * *', async () => {
+    if (!orderProcessing) {
+        console.log('order processing is disabled, to enable use "enable-order-processing" command line flag when running index.js'); 
+        return; 
+    }
+    
     console.log('attempting to execute limit stock orders'); 
 
     const ordersRef = db.collection('Orders')
@@ -61,9 +79,18 @@ cron.schedule('*/5 * * * * *', async () => {
     if (limitOrderList.empty) {
         console.log('no limit orders to execute'); 
         return; 
+    } else {
+        console.log('stock orders found')
     }
 
     limitOrderList.forEach(limitOrder => {
-        console.log(limitOrder); 
+        const stockPrice = alpacaApiCaller.fetchLatestTradeOf(limitOrder._fieldsProto.stockSymbol.stringValue);
+        const tradeType = limitOrder._fieldsProto.tradeType.stringValue; 
+        if ( (tradeType == 'sell' && stockPrice <= limit) || (tradeType='buy' && stockPrice >= limit)) {
+            console.log('limit order to be executed')
+            executeLimitTrade(limitOrder); 
+        } else {
+            console.log('limit order not ready to be executed'); 
+        }
     })
 })
