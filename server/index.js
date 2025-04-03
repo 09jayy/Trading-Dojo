@@ -83,7 +83,10 @@ cron.schedule('*/5 * * * * *', async () => {
         console.log('stock orders found')
     }
 
+    console.log(limitOrderList.length); 
+
     limitOrderList.forEach(limitOrder => {
+        console.log(limitOrder); 
         const stockPrice = alpacaApiCaller.fetchLatestTradeOf(limitOrder._fieldsProto.stockSymbol.stringValue);
         const tradeType = limitOrder._fieldsProto.tradeType.stringValue; 
         if ( (tradeType == 'sell' && stockPrice <= limit) || (tradeType='buy' && stockPrice >= limit)) {

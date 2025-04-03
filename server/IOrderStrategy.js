@@ -1,13 +1,13 @@
 class IOrderStrategy {
-    execute() {
+    async execute() {
         throw new Error('This method must be overwritten!');
     }
 
-    buy() {
+    async buy(sharePrice) {
         throw new Error('This method must be overwritten!');
     }
 
-    sell() {
+    async sell(sharePrice) {
         throw new Error('This method must be overwritten!');
     }
 

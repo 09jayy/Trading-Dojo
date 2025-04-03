@@ -1,4 +1,5 @@
-const IOrderStrategy = require('./IOrderStrategy.js')
+const firebase = require('firebase-admin'); 
+const IOrderStrategy = require('./IOrderStrategy.js');  
 
 class MarketOrder extends IOrderStrategy {
     constructor({tradeType, stockSymbol, shareQuantity, userId}){
@@ -8,14 +9,12 @@ class MarketOrder extends IOrderStrategy {
         this.userId = userId; 
     }
 
-    execute() {
+    async execute() {
         switch (this.tradeType) {
             case 'buy':
-                this.buy(); 
-                break;
+                return await this.buy(); 
             case 'sell':
-                this.sell();
-                break; 
+                return await this.sell();
         }
     }
 
@@ -23,12 +22,45 @@ class MarketOrder extends IOrderStrategy {
         return this.tradeType; 
     }
 
-    buy() {
-        
+    /**
+     * Buy stock shares via market order processing 
+     * process: 
+     * 1. adds shares to account , record amount of money spent buying that amount of shares
+     * 2. reduce account bank balance by money spent
+     * @param {Object} db - references firebase firestore database 
+     * @param {number} sharePrice - current fetched share price of stock to be used in order
+     * @returns {void}
+     */
+    async buy(db,sharePrice) {
+        try {
+            const costOfShares = sharePrice * this.shareQuantity; 
+
+            const userRef = db.collection('users').doc(this.userId); 
+
+            // 1. adds shares to account , record amount of money spent buying that amount of shares
+            const resSharesUpdate = await userRef.update(
+                {'ownedShares.stockSymbol': FieldValue.arrayUnion(
+                    {
+                        shareQuantity: this.shareQuantity,
+                        costOfShares: costOfShares,
+                        created: firebase.firestore.TimeStamp.now() 
+                    })
+                }
+            )
+            
+            // 2. reduce account bank balance by money spent
+            const resBalanceUpdate = await userRef.update(
+                {
+                    balance: FieldValue.increment(costOfShares * -1)
+                }
+            ); 
+        } catch (error) {
+            throw error;   
+        }
     }
 
-    sell() {
-
+    async sell(sharePrice) {
+        // 
     }
 }
 
