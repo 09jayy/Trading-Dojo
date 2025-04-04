@@ -11,6 +11,8 @@ import { Glossary } from './screens/Glossary/Glossary';
 import { Ionicons } from '@expo/vector-icons';
 import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
+import { CommunityView } from './screens/Community/CommunityView';
+import { JoinedCommunities } from './screens/Community/JoinedCommunities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -92,7 +94,8 @@ const MainTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Investments" component={Dashboard} />
     <Tab.Screen name="Stock Market" component={StockMarket} />
-    <Tab.Screen name="Communities" component={Dashboard} />
+    <Tab.Screen name="Communities" component={CommunityView} />
+    <Tab.Screen name="Joined Communities" component={JoinedCommunities} />
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
 );
