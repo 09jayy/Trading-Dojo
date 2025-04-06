@@ -3,21 +3,22 @@ const { Timestamp, FieldValue } = require('firebase-admin/firestore');
 const IOrderStrategy = require('./IOrderStrategy.js');  
 
 class MarketOrder extends IOrderStrategy {
+    /**
+     * Creates a market order using the provided order details
+     * @param {{
+    *      tradeType: 'buy'|'sell',  - Type of trade either 'buy' or 'sell'
+    *      stockSymbol: string,      - The stock symbol to trade
+    *      shareQuantity: number,    - Number of shares to buy/sell
+    *      userId: string            - ID of the user placing the order
+    * }} orderData - Market order properties
+    * @returns {MarketOrder} - new market order object 
+    */ 
     constructor({tradeType, stockSymbol, shareQuantity, userId}){
         super(); 
         this.tradeType = tradeType; 
         this.stockSymbol = stockSymbol;
         this.shareQuantity = shareQuantity; 
         this.userId = userId; 
-    }
-
-    async execute(db, sharePrice) {
-        switch (this.tradeType) {
-            case 'buy':
-                return await this.buy(db, sharePrice); 
-            case 'sell':
-                return await this.sell(db, sharePrice);
-        }
     }
 
     getTradeType() {
@@ -33,7 +34,7 @@ class MarketOrder extends IOrderStrategy {
      * @param {number} sharePrice - current fetched share price of stock to be used in order
      * @returns {void}
      */
-    async buy(db,sharePrice) {
+    async execute(db,sharePrice) {
         const costOfShares = sharePrice * this.shareQuantity; 
         try {
             const userRef = db.collection('users').doc(this.userId); 
@@ -45,24 +46,38 @@ class MarketOrder extends IOrderStrategy {
                     throw new Error('user doc does not exist'); 
                 }
 
-                // check if current balance is enough
+                // check if current balance is enough to buy shares
                 const currentBalance = userDoc.data().balance || 0;
-                if (currentBalance < costOfShares) {
+                if (this.tradeType === 'buy' && currentBalance < costOfShares) {
                     throw new Error('insufficient funds'); 
+                }
+
+                // check if selected share quantity is currently owned by user before selling 
+                if (this.tradeType === 'sell') {
+                    const stockSymbolTradeReciepts = userDoc.data().ownedShares?.[this.stockSymbol] || []; 
+                    const totalSharesOwned = stockSymbolTradeReciepts.reduce(
+                        (sum, trade) => sum + (trade.tradeType === 'buy' ? trade.shareQuantity : -trade.shareQuantity),
+                        0
+                    );
+                    
+                    if (totalSharesOwned < this.shareQuantity) {
+                        throw new Error('trying to sell insufficient share quantity'); 
+                    }
                 }
                 
                 // create new reciept for purchase
-                const sharePurchaseReciept = {
+                const shareOrderReciept = {
                     shareQuantity: this.shareQuantity,
-                    costOfShares: costOfShares,
+                    sharePrice: sharePrice,
+                    tradeType: this.tradeType, 
                     created: Timestamp.now()
                 }
 
                 // 1. adds shares to account , record amount of money spent buying that amount of shares
                 // 2. reduce account bank balance by money spent
                 t.update(userRef, {
-                    [`ownedShares.${this.stockSymbol}`]: FieldValue.arrayUnion(sharePurchaseReciept),
-                    'balance': FieldValue.increment(costOfShares * -1)
+                    [`ownedShares.${this.stockSymbol}`]: FieldValue.arrayUnion(shareOrderReciept),
+                    'balance': FieldValue.increment( (this.tradeType === 'buy') ? costOfShares * -1: costOfShares)
                 }) 
             })
             console.log('Transaction successfully commited')
@@ -72,8 +87,13 @@ class MarketOrder extends IOrderStrategy {
         }
     }
 
-    async sell(sharePrice) {
-        // 
+    async sell(db,sharePrice) {
+        const costOfShares = sharePrice * this.shareQuantity;
+        try {
+            const userRef = db.collection
+        } catch (error) {
+
+        }
     }
 }
 

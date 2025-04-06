@@ -46,7 +46,7 @@ app.get('/stock/:symbol', async (req, res) => {
  * @property {number} req.body.shareQuantity - Number of shares to purchase
  * @property {string} req.body.userId - ID of the user making the purchase
 */
-app.post('/order/buy', async (req, res) => {
+app.post('/order', async (req, res) => {
     try {
         console.log("Incoming request:", req.body); 
 
@@ -63,7 +63,7 @@ app.post('/order/buy', async (req, res) => {
             const order = new MarketOrder(req.body); 
             try {
                 await order.execute(db,sharePrice);
-                console.log('stocks bought');  
+                console.log('stock order completed');  
             } catch (error) {
                 console.error(error); 
             }
