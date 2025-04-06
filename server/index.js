@@ -17,8 +17,10 @@ const alpacaApiCaller = new StockApiCaller()
     .setApiKey(process.env.ALPACA_API_KEY)
     .setSecretKey(process.env.ALPACA_SECRET_KEY);
 
+// Limit Order Processing command line flag
 const limitOrderProcessing = process.argv.includes('--process-limit-orders'); 
 console.log('limit order processing is ' +  ( (limitOrderProcessing) ? 'enabled' : 'disabled') ); 
+if (!limitOrderProcessing) { console.log('order processing is disabled to reduce daily firebase read and writes, \nto enable use "--process-limit-orders" command line flag when running index.js'); }
 
 // initialise firebase admin app with service account key
 initializeApp({
@@ -74,17 +76,9 @@ app.post('/order', async (req, res) => {
     }
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
 /* STOCK ORDER EXEUCTION */
 cron.schedule('*/5 * * * * *', async () => {
-    if (!limitOrderProcessing) {
-        console.log('order processing is disabled, to enable use "enable-order-processing" command line flag when running index.js'); 
-        return; 
-    }
-    
+    if (!limitOrderProcessing) { return; }    
     console.log('attempting to execute limit stock orders'); 
 
     const ordersRef = db.collection('Orders')
@@ -110,4 +104,8 @@ cron.schedule('*/5 * * * * *', async () => {
             console.log('limit order not ready to be executed'); 
         }
     })
+})
+
+app.listen(port, () => {
+    console.log(`Order Server App listening on port ${port}`)
 })
