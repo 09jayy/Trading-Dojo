@@ -61,7 +61,7 @@ class MarketOrder extends IOrderStrategy {
                 // 1. adds shares to account , record amount of money spent buying that amount of shares
                 // 2. reduce account bank balance by money spent
                 t.update(userRef, {
-                    'ownedShares.stockSymbol': FieldValue.arrayUnion(sharePurchaseReciept),
+                    [`ownedShares.${this.stockSymbol}`]: FieldValue.arrayUnion(sharePurchaseReciept),
                     'balance': FieldValue.increment(costOfShares * -1)
                 }) 
             })
