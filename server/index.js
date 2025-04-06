@@ -4,6 +4,7 @@ const { initializeApp, applicationDefault, cert } = require('firebase-admin/app'
 const serviceAccount = require('./serviceAccountKey.json'); 
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
 const StockApiCaller = require('stockapicaller'); 
+const MarketOrder = require('./MarketOrder'); 
 require('dotenv').config(); 
 
 // initialise express app server
@@ -16,12 +17,10 @@ const alpacaApiCaller = new StockApiCaller()
     .setApiKey(process.env.ALPACA_API_KEY)
     .setSecretKey(process.env.ALPACA_SECRET_KEY);
 
-const orderProcessing = process.argv.includes('enable-order-processing'); 
-if (orderProcessing) {
-    console.log('order processing is enabled') 
-} else {
-    console.log('order processing is disabled')
-}
+// Limit Order Processing command line flag
+const limitOrderProcessing = process.argv.includes('--process-limit-orders'); 
+console.log('limit order processing is ' +  ( (limitOrderProcessing) ? 'enabled' : 'disabled') ); 
+if (!limitOrderProcessing) { console.log('order processing is disabled to reduce daily firebase read and writes, \nto enable use "--process-limit-orders" command line flag when running index.js'); }
 
 // initialise firebase admin app with service account key
 initializeApp({
@@ -41,7 +40,14 @@ app.get('/stock/:symbol', async (req, res) => {
     res.send(stats);
 })
 
-/** endpoint for adding order to database */
+/** 
+ * endpoint for adding order to database 
+ * @param {Request} req - request sent in via post
+ * @property {Object} req.body - Request body
+ * @property {string} req.body.stockSymbol - Symbol of the stock to purchase
+ * @property {number} req.body.shareQuantity - Number of shares to purchase
+ * @property {string} req.body.userId - ID of the user making the purchase
+*/
 app.post('/order', async (req, res) => {
     try {
         console.log("Incoming request:", req.body); 
@@ -50,27 +56,29 @@ app.post('/order', async (req, res) => {
             return res.status(400).json({ error: "Invalid request: No order data received" });
         }
 
-        const docRef = db.collection('Orders').doc();
-        await docRef.set(req.body);
+        const latestTrade = await alpacaApiCaller.fetchLatestTradeOf(req.body.stockSymbol); 
+        console.log(latestTrade); 
+        const sharePrice = latestTrade.trade.p; 
+        console.log('current price: ', sharePrice); 
 
-        res.status(201).json({ message: "Order added successfully", orderId: docRef.id });
+        if (!req.body.limit) {
+            const order = new MarketOrder(req.body); 
+            try {
+                await order.execute(db,sharePrice);
+                console.log('stock order completed');  
+            } catch (error) {
+                console.error(error); 
+            }
+        }
     } catch (error) {
         console.error("Error saving order:", error);
         res.status(500).json({ error: "Internal Server Error" });
     }
 })
 
-app.listen(port, () => {
-    console.log(`Example app listening on port ${port}`)
-})
-
 /* STOCK ORDER EXEUCTION */
 cron.schedule('*/5 * * * * *', async () => {
-    if (!orderProcessing) {
-        console.log('order processing is disabled, to enable use "enable-order-processing" command line flag when running index.js'); 
-        return; 
-    }
-    
+    if (!limitOrderProcessing) { return; }    
     console.log('attempting to execute limit stock orders'); 
 
     const ordersRef = db.collection('Orders')
@@ -96,4 +104,8 @@ cron.schedule('*/5 * * * * *', async () => {
             console.log('limit order not ready to be executed'); 
         }
     })
+})
+
+app.listen(port, () => {
+    console.log(`Order Server App listening on port ${port}`)
 })

@@ -1,21 +1,24 @@
 const firebase = require('firebase-admin'); 
+const { Timestamp, FieldValue } = require('firebase-admin/firestore');
 const IOrderStrategy = require('./IOrderStrategy.js');  
 
 class MarketOrder extends IOrderStrategy {
+    /**
+     * Creates a market order using the provided order details
+     * @param {{
+    *      tradeType: 'buy'|'sell',  - Type of trade either 'buy' or 'sell'
+    *      stockSymbol: string,      - The stock symbol to trade
+    *      shareQuantity: number,    - Number of shares to buy/sell
+    *      userId: string            - ID of the user placing the order
+    * }} orderData - Market order properties
+    * @returns {MarketOrder} - new market order object 
+    */ 
     constructor({tradeType, stockSymbol, shareQuantity, userId}){
+        super(); 
         this.tradeType = tradeType; 
         this.stockSymbol = stockSymbol;
         this.shareQuantity = shareQuantity; 
         this.userId = userId; 
-    }
-
-    async execute() {
-        switch (this.tradeType) {
-            case 'buy':
-                return await this.buy(); 
-            case 'sell':
-                return await this.sell();
-        }
     }
 
     getTradeType() {
@@ -31,36 +34,57 @@ class MarketOrder extends IOrderStrategy {
      * @param {number} sharePrice - current fetched share price of stock to be used in order
      * @returns {void}
      */
-    async buy(db,sharePrice) {
+    async execute(db,sharePrice) {
+        const costOfShares = sharePrice * this.shareQuantity; 
         try {
-            const costOfShares = sharePrice * this.shareQuantity; 
-
             const userRef = db.collection('users').doc(this.userId); 
+            await db.runTransaction(async (t) => {
+                const userDoc = await t.get(userRef);
+                
+                // check user is valid
+                if (!userDoc.exists) {
+                    throw new Error('user doc does not exist'); 
+                }
 
-            // 1. adds shares to account , record amount of money spent buying that amount of shares
-            const resSharesUpdate = await userRef.update(
-                {'ownedShares.stockSymbol': FieldValue.arrayUnion(
-                    {
-                        shareQuantity: this.shareQuantity,
-                        costOfShares: costOfShares,
-                        created: firebase.firestore.TimeStamp.now() 
-                    })
+                // check if current balance is enough to buy shares
+                const currentBalance = userDoc.data().balance || 0;
+                if (this.tradeType === 'buy' && currentBalance < costOfShares) {
+                    throw new Error('insufficient funds'); 
                 }
-            )
-            
-            // 2. reduce account bank balance by money spent
-            const resBalanceUpdate = await userRef.update(
-                {
-                    balance: FieldValue.increment(costOfShares * -1)
+
+                // check if selected share quantity is currently owned by user before selling 
+                if (this.tradeType === 'sell') {
+                    const stockSymbolTradeReciepts = userDoc.data().ownedShares?.[this.stockSymbol] || []; 
+                    const totalSharesOwned = stockSymbolTradeReciepts.reduce(
+                        (sum, trade) => sum + (trade.tradeType === 'buy' ? trade.shareQuantity : -trade.shareQuantity),
+                        0
+                    );
+                    
+                    if (totalSharesOwned < this.shareQuantity) {
+                        throw new Error('trying to sell insufficient share quantity'); 
+                    }
                 }
-            ); 
+                
+                // create new reciept for purchase
+                const shareOrderReciept = {
+                    shareQuantity: this.shareQuantity,
+                    sharePrice: sharePrice,
+                    tradeType: this.tradeType, 
+                    created: Timestamp.now()
+                }
+
+                // 1. adds shares to account , record amount of money spent buying that amount of shares
+                // 2. reduce account bank balance by money spent
+                t.update(userRef, {
+                    [`ownedShares.${this.stockSymbol}`]: FieldValue.arrayUnion(shareOrderReciept),
+                    'balance': FieldValue.increment( (this.tradeType === 'buy') ? costOfShares * -1: costOfShares)
+                }) 
+            })
+            console.log('Transaction successfully commited')
         } catch (error) {
-            throw error;   
+            console.error('Transaction failed: ' + error); 
+            throw error; 
         }
-    }
-
-    async sell(sharePrice) {
-        // 
     }
 }
 

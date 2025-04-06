@@ -34,7 +34,28 @@ npm start
 
 ## Running Server Application
 
-TODO
+### 1. Set up environment variables
+```bash
+ALPACA_API_KEY='insert alpaca api key'
+ALPACA_SECRET_KEY='insert alapaca secret key' 
+```
+
+### 2. Fetch the firebase firestore service account key for firebase/admin
+To retrieve a new private key: In the firebase, select project, then project overview gear icon->project settings->service accounts->generate new private key. This will download a .json file.
+Move this json file into folder '.../Trading-Dojo/server' and rename to 'serviceAccountKey.json'
+
+### 3. Start server using node
+
+```bash
+# in a new terminal different to the expo application
+cd server
+npm install
+node index.js 
+```
+
+**Additional Flags**
+
+Use `node index.js --process-limit-orders` to enable background task of server to regularly process limit orders. 
 
 ## Issues & Troubleshooting
 
