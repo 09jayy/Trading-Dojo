@@ -86,15 +86,6 @@ class MarketOrder extends IOrderStrategy {
             throw error; 
         }
     }
-
-    async sell(db,sharePrice) {
-        const costOfShares = sharePrice * this.shareQuantity;
-        try {
-            const userRef = db.collection
-        } catch (error) {
-
-        }
-    }
 }
 
 module.exports = MarketOrder;
