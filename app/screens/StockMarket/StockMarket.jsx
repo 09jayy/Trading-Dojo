@@ -1,6 +1,4 @@
 import React from 'react';
-import { View, Text } from 'react-native';
-import React from 'react'
 import { SafeAreaView, FlatList, StyleSheet, View } from 'react-native'
 import { SAMPLE_DATA } from './SampleData'
 import StockItem from './StockItem'
