@@ -13,6 +13,7 @@ import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
+import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -59,6 +60,13 @@ export default function App() {
               component={Glossary}
               options={{ title: 'Glossary' }}
             />
+
+            <Stack.Screen
+            name="CommunityDetails"
+            component={CommunityDetail}
+            options={{ title: 'CommunityDetails' }}
+            />
+
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>

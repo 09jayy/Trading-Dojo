@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react'
-import { View, Text, FlatList } from 'react-native'
+import { View, Text, FlatList, Touchable, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context'
 import { db } from '../../components/Config/firebaseConfig'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { getDocs, collection} from 'firebase/firestore'
 import { useIsFocused } from '@react-navigation/native'
+import { useNavigation } from '@react-navigation/native'
 
 
 export const JoinedCommunities = () => {
@@ -12,6 +13,8 @@ export const JoinedCommunities = () => {
     const [communities, setCommunities] = useState([]);
     const [uid, setUid] = useState(null);
     const isFocused = useIsFocused();
+    const navigation = useNavigation();
+    
 
     useEffect(() => {
         const fetchUserData = async () => {
@@ -58,7 +61,7 @@ export const JoinedCommunities = () => {
                     data={communities}
                     keyExtractor={item => item.id}
                     renderItem={({item}) => <View>
-                        <Text>{item.name}</Text>
+                        <TouchableOpacity onPress={() => navigation.navigate('CommunityDetails', {id: item.id})}><Text>{item.name}</Text></TouchableOpacity>
                     </View>}
                 />
             </View>
