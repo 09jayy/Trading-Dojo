@@ -71,6 +71,18 @@ class StockApiCaller {
         return await this.apiService.fetchLatestQuoteOf(symbol, this.apiKey, this.secretKey);
     }
 
+    async fetchPreviousBarData(symbols) {
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+        
+        return await this.apiService.fetchPreviousBarData(symbols, this.apiKey, this.secretKey); 
+    }
+
     /**
      * 
      * @param {string} symbol - stock symbol 
