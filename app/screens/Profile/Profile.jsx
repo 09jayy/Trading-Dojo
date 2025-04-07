@@ -29,6 +29,7 @@ export const Profile = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email..."
+                    placeholderTextColor="#888"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -36,6 +37,7 @@ export const Profile = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Username..."
+                    placeholderTextColor="#888"
                     value={username}
                     onChangeText={setUsername}
                 />
@@ -43,6 +45,7 @@ export const Profile = () => {
                 <TextInput
                     style={styles.input}
                     placeholder='Password...'
+                    placeholderTextColor="#888"
                     value={password}
                     onChangeText={setPassword}
                 />
@@ -50,6 +53,7 @@ export const Profile = () => {
                 <TextInput
                     style={styles.input}
                     placeholder='Confirm Password...'
+                    placeholderTextColor="#888"
                     value={confirmPassword}
                     onChangeText={setConfirmPassword}
                 />

@@ -22,6 +22,7 @@ export const SignIn = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email..."
+                    placeholderTextColor="#888"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -29,6 +30,7 @@ export const SignIn = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Password..."
+                    placeholderTextColor="#888"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
