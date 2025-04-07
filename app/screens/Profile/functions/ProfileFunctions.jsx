@@ -12,9 +12,9 @@ export const update = async (email, username, password, confirmPassword) => {
         return;
     }
     
-    updateEmail(email);
+    updateEmailHandler(email);
     updateUsername(username, uid);
-    updatePassword(password, confirmPassword);
+    updatePasswordHandler(password, confirmPassword);
 }
 
 const getUser = async () => {
@@ -32,7 +32,7 @@ const getUser = async () => {
     }
 }
 
-const updateEmail = (email, user) => {
+const updateEmailHandler = (email, user) => {
     console.log("email: ", email);
 
     if (email !== ""){
@@ -56,7 +56,7 @@ const updateUsername = (username, uid) => {
     }
 }
 
-const updatePassword = (password, confirmPassword) => {
+const updatePasswordHandler = (password, confirmPassword) => {
     console.log("password: ", password)
     console.log("confirmation: ", confirmPassword)
     if((password === confirmPassword) && (password !== "")){
