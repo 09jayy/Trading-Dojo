@@ -101,6 +101,61 @@ class AlpacaApiService extends IApiService {
             throw error;
         }
     }
+
+    isBusinessDay(date) {
+        let day = date.getDay(); 
+        return (day == 0 || day == 6) ? false : true;
+    }
+
+    /**
+     * Fetches the previous day's bar data for a list of stock symbols.
+     * @param {string[]} symbols - The stock symbols to fetch data for.
+     * @param {string} apiKey - The API key used for authentication.
+     * @param {string} secretKey - The secret key used for authentication.
+     * @returns {Promise<{
+     *      [symbol: string]: Array<{
+    *          c: number, // Close price
+    *          h: number, // High price
+    *          l: number, // Low price
+    *          n: number, // Number of trades
+    *          o: number, // Open price
+    *          t: string, // Timestamp of the bar (ISO 8601 format)
+    *          v: number, // Volume of the stock
+    *          vw: number  // Volume-weighted average price
+    *      }>
+    * }>} - An object containing stock symbols as keys, and their respective bar data as values.
+    * @throws {Error} - If the request fails or encounters an error.
+    */
+    async fetchPreviousBarData(symbols, apiKey, secretKey) {
+        let date = new Date(); 
+        const bars = {}
+        while (!this.isBusinessDay(date)) {
+            date.setDate(date.getDate() -1); 
+        }
+        const url = `https://data.alpaca.markets/v2/stocks/bars?symbols=${symbols.join()}&timeframe=1Day&start=${date.toISOString().split('T')[0]}`; 
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers: {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'APCA-API-KEY-ID': apiKey,
+                    'APCA-API-SECRET-KEY': secretKey
+                }
+            }); 
+
+            if (!response.ok) {
+                const errorBody = await response.text();
+                throw new Error(`Request failed with status ${response.status}: ${errorBody}`);
+            }
+
+            const data = await response.json(); 
+
+            return data; 
+        } catch (error) {
+            throw error; 
+        }
+    }
 }
 
 module.exports = AlpacaApiService;
