@@ -14,6 +14,7 @@ import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 
 const Tab = createBottomTabNavigator();
@@ -66,6 +67,7 @@ export default function App() {
             <Stack.Screen name="AuthTabs" component={AuthTabs} />
           </Stack.Navigator>
         )}
+        <Toast/>
       </NavigationContainer>
     </signedInContext.Provider>
   );
