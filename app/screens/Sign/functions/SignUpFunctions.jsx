@@ -32,7 +32,6 @@ const handleSignUp = async (role, email, password, setter) => {
         const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
             name: "",
-            email: email,
             role: role,
             createdAt: serverTimestamp()
         });
