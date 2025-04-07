@@ -34,17 +34,25 @@ npm start
 
 ## Running Server Application
 
-### 1. Set up environment variables
+### 1. Install dependencies of shared/StockApiCaller 
+
+```bash
+cd shared
+cd StockApiCaller
+npm install
+```
+
+### 2. Set up environment variables
 ```bash
 ALPACA_API_KEY='insert alpaca api key'
 ALPACA_SECRET_KEY='insert alapaca secret key' 
 ```
 
-### 2. Fetch the firebase firestore service account key for firebase/admin
+### 3. Fetch the firebase firestore service account key for firebase/admin
 To retrieve a new private key: In the firebase, select project, then project overview gear icon->project settings->service accounts->generate new private key. This will download a .json file.
 Move this json file into folder '.../Trading-Dojo/server' and rename to 'serviceAccountKey.json'
 
-### 3. Start server using node
+### 4. Start server using node
 
 ```bash
 # in a new terminal different to the expo application
