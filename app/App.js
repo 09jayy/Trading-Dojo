@@ -11,6 +11,7 @@ import { Glossary } from './screens/Glossary/Glossary';
 import { Ionicons } from '@expo/vector-icons';
 import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
+import { StockSpecific } from './screens/StockMarket/StockSpecific/StockSpecific';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -89,13 +90,24 @@ const AuthTabs = () => (
   </Tab.Navigator>
 );
 
+const StockMarketStack = () => {
+  return (
+    <Stack.Navigator>
+      <Stack.Screen name="StockMarket" component={StockMarket} options={{ title: 'Stock Market' }} />
+      <Stack.Screen name="StockSpecific" component={StockSpecific} options={({ route }) => ({ title: route.params.stock.name })} />
+    </Stack.Navigator>
+  );
+};
+
+
 // Signed-in tab navigator (Dashboard, Profile, etc.)
 const MainTabs = () => (
   <Tab.Navigator>
     <Tab.Screen name="Investments" component={Dashboard} />
-    <Tab.Screen name="Stock Market" component={StockMarket} />
+    <Tab.Screen name="Stock Market" component={StockMarketStack} options={{ headerShown: false }} />
     <Tab.Screen name="Communities" component={CommunityView} />
     <Tab.Screen name="Joined Communities" component={JoinedCommunities} />
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
 );
+
