@@ -17,6 +17,7 @@ import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Posts } from './screens/Community/CommunityPages/Posts';
 import { Chat } from './screens/Community/CommunityPages/Chat';
+import { useRoute } from '@react-navigation/native';
 
 
 const Tab = createBottomTabNavigator();
@@ -110,9 +111,15 @@ const MainTabs = () => (
   </Tab.Navigator>
 );
 
-const CommunityDetailTabs = () => (
-  <Tab.Navigator>
-    <Tab.Screen name="Posts" component={Posts} />
-    <Tab.Screen name="Chat" component={Chat} />
-  </Tab.Navigator>
-);
+const CommunityDetailTabs = () => {
+  const route = useRoute();
+  const { id } = route.params;
+
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Details" component={CommunityDetail} initialParams={{ id }} />
+      <Tab.Screen name="Posts" component={Posts} initialParams={{ id }} />
+      <Tab.Screen name="Chat" component={Chat} initialParams={{ id }} />
+    </Tab.Navigator>
+  );
+};
