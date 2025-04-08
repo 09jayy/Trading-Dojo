@@ -46,6 +46,9 @@ export const Chat = ({ route }) => {
         }
         
         fetchMessages()
+        if (flatListRef.current && messages.length > 0) {
+            flatListRef.current.scrollToEnd()
+        }
     });
 
     function ChatMessage(props) {
