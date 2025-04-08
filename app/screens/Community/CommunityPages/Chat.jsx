@@ -68,10 +68,10 @@ export const Chat = ({ route }) => {
     }
 
     useEffect(() => {
-        if (flatListRef.current && messages.length < 0) {
+        if (flatListRef.current && messages.length > 0) {
             flatListRef.current.scrollToEnd({ animated: true })
         }
-    }, [messages])
+    }, [messages.length])
 
     return (
         <View style={styles.chatContainer}>
