@@ -8,26 +8,22 @@ import { useNavigation } from '@react-navigation/native';
 import StockApiCaller from 'stockapicaller'; 
 import Constants from 'expo-constants'; 
 import { getPriceChangesWithTime } from './functions';
+import {Graph} from './Graph';
+import {db} from '../../components/Config/firebaseConfig'; 
+import {collection, getDocs} from 'firebase/firestore'; 
 
 const extra = Constants.expoConfig?.extra ?? {}; 
 
 const {alpacaApiKey, alpacaSecretKey} = extra; 
 
+const stockApiCaller = new StockApiCaller()
+          .setApiService('alpaca')
+          .setApiKey(alpacaApiKey)
+          .setSecretKey(alpacaSecretKey); 
+
 export const Dashboard = () => {
     const navigation = useNavigation();
     const {setSignedIn} = useContext(signedInContext);
-
-    // useEffect(() => {
-    //   const stockApiCaller = new StockApiCaller()
-    //       .setApiService('alpaca')
-    //       .setApiKey(alpacaApiKey)
-    //       .setSecretKey(alpacaSecretKey); 
-
-    //   getPriceChangesWithTime(stockApiCaller, 'TSLA', '1Hour',{start: '2025-04-01T08:00:00Z  '})
-    //       .then(data => console.log('data', data))
-    //       .catch(err => console.error(err));
-    // }, []);
-    
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -76,6 +72,8 @@ export const Dashboard = () => {
     
             <Text style={styles.graphNotice}>
               overall portfolio performance graph (scroll down to view more)
+              
+              <Graph labels={[1,2]} data={[1,10]}/>
             </Text>
           </ScrollView>
         </SafeAreaView>
