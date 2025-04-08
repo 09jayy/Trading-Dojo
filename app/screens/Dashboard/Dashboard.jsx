@@ -25,36 +25,70 @@ const stockApiCaller = new StockApiCaller()
 export const Dashboard = () => {
     const navigation = useNavigation();
     const {setSignedIn} = useContext(signedInContext);
-    const [userId, setUserId] = useState(''); 
     const [ownedShares, setOwnedShares] = useState({}); 
-    const [shareWorthOvertime, setShareWorthOvertime] = useState({}); 
+    const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
+
+    useEffect(()=>{
+      // load user id and owned shares
+      const loadUserData = async () => {
+        // load user id from async storage
+        const uid = await fetchUserId();
+
+        // load owned shares from firestore
+        const owned = await fetchOwnedShares(uid);
+        setOwnedShares(owned.ownedShares); 
+      }
+      loadUserData()
+    },[])
+
+
 
     useEffect(() => {
-      const loadData = async () => {
-          const id = await fetchUserId();
-          if (!id) return;
-          setUserId(id);
-
-          console.log('id', id); 
-
-          const shares = await fetchOwnedShares(id);
-          console.log(shares.ownedShares);
+      const loadShareWorthData = async () => {
+        if (!ownedShares || Object.keys(ownedShares).length === 0) return;
+    
+        try {
+          const newShareWorth = {};
           
-          const priceChange = await getPriceChangesWithTime(stockApiCaller, 'TSLA','5Min'); 
-          console.log(priceChange); 
-          
-          const ashareWorthOvertime = getShareWorthOvertime(shares.ownedShares.TSLA, priceChange)
-          console.log(ashareWorthOvertime);
-          setShareWorthOvertime(ashareWorthOvertime);  
-        };
-      console.log('error')
-      loadData();
-  }, [stockApiCaller]);
+          // Process each symbol sequentially
+          for (const symbol in ownedShares) {
+            if (!ownedShares[symbol]?.length) continue;
+    
+            try {
+              const priceChange = await getPriceChangesWithTime(
+                stockApiCaller, 
+                symbol,
+                '1Hour', 
+                { start: ownedShares[symbol][0].time }
+              );
+    
+              if (priceChange?.length) {
+                newShareWorth[symbol] = getShareWorthOvertime(
+                  ownedShares[symbol], 
+                  priceChange
+                );
+              }
+            } catch (error) {
+              console.error(`Failed processing ${symbol}:`, error);
+            }
+          }
+    
+          setSharesWorthOvertime(prev => ({
+            ...prev,
+            ...newShareWorth
+        }));
+        } catch (error) {
+          console.error("Failed loading share worth data:", error);
+        }
+      };
+    
+      loadShareWorthData();
+  }, [ownedShares, stockApiCaller]);
 
   useEffect(() => {
       console.log("📊 Owned Shares:", ownedShares);
-      console.log("📈 Share Worth Over Time:", shareWorthOvertime);
-  }, [ownedShares, shareWorthOvertime]);
+      console.log("📈 Share Worth Over Time:", sharesWorthOvertime);
+  }, [ownedShares, sharesWorthOvertime]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -98,14 +132,22 @@ export const Dashboard = () => {
                     />
                   </View>
                 </View>
-              </View>
+              </View>       
             ))}
     
             <Text style={styles.graphNotice}>
               overall portfolio performance graph (scroll down to view more)
-              
-              <Graph labels={shareWorthOvertime?.times || [1]} data={shareWorthOvertime?.shareWorths || [1]}/>
             </Text>
+
+            {Object.entries(sharesWorthOvertime).map(([symbol, data]) => (
+              <View key={symbol}>
+                <Text>{symbol}</Text>
+                <Graph 
+                  labels={data?.times || [1]} 
+                  data={data?.shareWorths || [1]}
+                />
+              </View>
+            ))}
           </ScrollView>
         </SafeAreaView>
       );

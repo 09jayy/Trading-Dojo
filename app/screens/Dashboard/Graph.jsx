@@ -18,9 +18,10 @@ export const Graph = ({labels,data}) => {
                     }
                 ]
                 }}
-                width={Dimensions.get("window").width} // from react-native
+                width={Dimensions.get("window").width - 50} // from react-native
                 height={220}
                 yAxisLabel="$"
+                formatXLabel={(value)=>{return ''}}
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
                 backgroundColor: "#e26a00",
@@ -33,7 +34,7 @@ export const Graph = ({labels,data}) => {
                     borderRadius: 16
                 },
                 propsForDots: {
-                    r: "6",
+                    r: "3",
                     strokeWidth: "2",
                     stroke: "#ffa726"
                 }
