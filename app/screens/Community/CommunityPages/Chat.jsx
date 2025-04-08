@@ -1,7 +1,7 @@
-import { View, Text, Button, TextInput } from 'react-native'
+import { View, Text, Button, TextInput, FlatList } from 'react-native'
 import { styles } from '../../../screens/Sign/StyleSheet'
-import { db } from '../../../components/Config/firebaseConfig'
-import { useEffect, useState } from 'react'
+import { db, auth } from '../../../components/Config/firebaseConfig'
+import { useEffect, useState, useRef } from 'react'
 import { collection, getDocs, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 
@@ -10,6 +10,7 @@ export const Chat = ({ route }) => {
     const [messages, setMessages] = useState([])
     const [input, setInput] = useState('')
     const [CurrentID, setCurrentID] = useState("Yc1m8LbeyCaC8ZkdN5oav7zANJD3")
+    const flatListRef = useRef(null)
 
     useEffect(() => {
         const messagesRef = collection(db, "Communities", id, "chat")
@@ -66,11 +67,21 @@ export const Chat = ({ route }) => {
         setInput('')
     }
 
+    useEffect(() => {
+        if (flatListRef.current && messages.length > 0) {
+            flatListRef.current.scrollToEnd({ animated: true })
+        }
+    }, [messages.length])
+
     return (
-        <View style={styles.container}>
-            <View>
-                {messages && messages.map(msg => <ChatMessage key={msg.id} message={msg} />)}
-            </View>
+        <View style={styles.chatContainer}>
+            <FlatList
+                ref={flatListRef}
+                data={messages}
+                keyExtractor={item => item.id}
+                renderItem={({ item }) => <ChatMessage message={item} />}
+                style={styles.messsageContainer}
+            />
 
             <View style={styles.formContainer}>
                 <TextInput
