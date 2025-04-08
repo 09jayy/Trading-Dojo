@@ -1,15 +1,33 @@
-import React, { useContext, useLayoutEffect } from 'react';
+import React, { useContext, useLayoutEffect, useEffect } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { signedInContext } from '../../AppContext';
 import { Entypo } from '@expo/vector-icons';
 import { styles } from './DashboardStyles';
 import { useNavigation } from '@react-navigation/native';
+import StockApiCaller from 'stockapicaller'; 
+import Constants from 'expo-constants'; 
+import { getPriceChangesWithTime } from './functions';
 
+const extra = Constants.expoConfig?.extra ?? {}; 
+
+const {alpacaApiKey, alpacaSecretKey} = extra; 
 
 export const Dashboard = () => {
     const navigation = useNavigation();
-    const {setSignedIn} = useContext(signedInContext)
+    const {setSignedIn} = useContext(signedInContext);
+
+    // useEffect(() => {
+    //   const stockApiCaller = new StockApiCaller()
+    //       .setApiService('alpaca')
+    //       .setApiKey(alpacaApiKey)
+    //       .setSecretKey(alpacaSecretKey); 
+
+    //   getPriceChangesWithTime(stockApiCaller, 'TSLA', '1Hour',{start: '2025-04-01T08:00:00Z  '})
+    //       .then(data => console.log('data', data))
+    //       .catch(err => console.error(err));
+    // }, []);
+    
 
     useLayoutEffect(() => {
         navigation.setOptions({
