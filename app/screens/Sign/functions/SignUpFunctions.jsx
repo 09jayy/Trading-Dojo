@@ -35,7 +35,9 @@ const handleSignUp = async (role, email, password, setter) => {
             email: email,
             role: role,
             communities: [],
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            balance: 10000,
+            ownedShares: {}
         });
 
         signIn(email, password, setter);
