@@ -4,6 +4,7 @@ import { SafeAreaView } from 'react-native-safe-area-context'
 import { db } from '../../components/Config/firebaseConfig'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { doc, getDocs, collection, updateDoc, arrayUnion, arrayRemove, getDoc} from 'firebase/firestore'
+import { styles } from './CommunityStyle/ViewStyle'
 
 export const CommunityView = () => {
     const [communities, setCommunities] = useState([]);
@@ -117,8 +118,9 @@ export const CommunityView = () => {
     }
 
   return (
-    <SafeAreaView>
+    <SafeAreaView style={styles.container}>
         <TextInput
+            style={styles.input}
             placeholder="Search..."
             value={search}
             onChangeText={handleSearch}
@@ -127,9 +129,9 @@ export const CommunityView = () => {
             data={filteredCommunities}
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
-            <View>
-                <Text>{item.name}</Text>
-                <Button title={item.members?.includes(uid) ? "Leave" : "Join"} onPress={() => handleJoinLeave(item.id)}/>
+            <View style={styles.communityCard}>
+                <Text style = {styles.communityName}>{item.name}</Text>
+                <Button style = {styles.button} title={item.members?.includes(uid) ? "Leave" : "Join"} onPress={() => handleJoinLeave(item.id)}/>
             </View>
             )}
         />
