@@ -7,7 +7,7 @@ import { styles } from './DashboardStyles';
 import { useNavigation } from '@react-navigation/native';
 import StockApiCaller from 'stockapicaller'; 
 import Constants from 'expo-constants'; 
-import { getPriceChangesWithTime } from './functions';
+import { getPriceChangesWithTime, getShareWorthOvertime, fetchUserId, fetchOwnedShares, fetchShareWorthOvertime } from './functions';
 import {Graph} from './Graph';
 import {db} from '../../components/Config/firebaseConfig'; 
 import {doc, getDocs, getDoc} from 'firebase/firestore'; 
@@ -18,59 +18,43 @@ const extra = Constants.expoConfig?.extra ?? {};
 const {alpacaApiKey, alpacaSecretKey} = extra; 
 
 const stockApiCaller = new StockApiCaller()
-          .setApiService('alpaca')
-          .setApiKey(alpacaApiKey)
-          .setSecretKey(alpacaSecretKey); 
+  .setApiService('alpaca')
+  .setApiKey(alpacaApiKey)
+  .setSecretKey(alpacaSecretKey); 
 
 export const Dashboard = () => {
     const navigation = useNavigation();
     const {setSignedIn} = useContext(signedInContext);
     const [userId, setUserId] = useState(''); 
     const [ownedShares, setOwnedShares] = useState({}); 
+    const [shareWorthOvertime, setShareWorthOvertime] = useState({}); 
 
     useEffect(() => {
-      const getUserId = async () => {
-        try {
-          const userString = await AsyncStorage.getItem('user'); 
-          if (userString) {
-            const user = JSON.parse(userString); 
-            setUserId(user.uid); 
-          } else {
-            console.warn("No user found in storage, check async storage of user data at signing in");
-          }
-        } catch (error) {
-          console.error("Error fetching user ID:", error); 
-        }
-      };
-    
-      getUserId(); 
-    }, []);
+      const loadData = async () => {
+          const id = await fetchUserId();
+          if (!id) return;
+          setUserId(id);
 
-    useEffect(() => {
-      const getOwnedShares = async () => {
-        if (!userId) return;
-        try {
-          console.log('get owned shares')
-          const docRef = doc(db,'users', userId); 
-          const docSnap = await getDoc(docRef); 
+          console.log('id', id); 
 
-          if (docSnap.exists()) {
-            console.log("Document data:", docSnap.data());
-          } else {
-            // docSnap.data() will be undefined in this case
-            console.log("No such document!");
-          } 
-          setOwnedShares(JSON.stringify(docSnap.data(), null, 2));
-        } catch (error) {
-          console.error(error); 
-        }
-      }
-      getOwnedShares(); 
-    },[userId])
+          const shares = await fetchOwnedShares(id);
+          console.log(shares.ownedShares);
+          
+          const priceChange = await getPriceChangesWithTime(stockApiCaller, 'TSLA','5Min'); 
+          console.log(priceChange); 
+          
+          const ashareWorthOvertime = getShareWorthOvertime(shares.ownedShares.TSLA, priceChange)
+          console.log(ashareWorthOvertime);
+          setShareWorthOvertime(ashareWorthOvertime);  
+        };
+      console.log('error')
+      loadData();
+  }, [stockApiCaller]);
 
-    useEffect(()=>{
-      console.log(ownedShares)
-    },[ownedShares]); 
+  useEffect(() => {
+      console.log("📊 Owned Shares:", ownedShares);
+      console.log("📈 Share Worth Over Time:", shareWorthOvertime);
+  }, [ownedShares, shareWorthOvertime]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -120,7 +104,7 @@ export const Dashboard = () => {
             <Text style={styles.graphNotice}>
               overall portfolio performance graph (scroll down to view more)
               
-              <Graph labels={[1,2]} data={[1,10]}/>
+              <Graph labels={shareWorthOvertime?.times || [1]} data={shareWorthOvertime?.shareWorths || [1]}/>
             </Text>
           </ScrollView>
         </SafeAreaView>
