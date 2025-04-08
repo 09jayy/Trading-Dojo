@@ -87,4 +87,12 @@ export const styles = StyleSheet.create({
     receivedText: {
         color: '#fff',
     },
+    sentName: {
+        fontWeight: 'bold',
+        color: '#000',
+    },
+    receivedName: {
+        fontWeight: 'bold',
+        color: '#fff',
+    },
 });
