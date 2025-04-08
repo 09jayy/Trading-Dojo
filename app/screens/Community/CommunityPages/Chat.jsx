@@ -17,8 +17,6 @@ export const Chat = ({ route }) => {
             try {
                 const user = JSON.parse(await AsyncStorage.getItem('user'));
                 setCurrentUid(user.uid);
-                console.log("User ID: ", uid);
-                console.log(user.uid);
             } catch (error) {
                 console.error("Error fetching user data: ", error);
             }
