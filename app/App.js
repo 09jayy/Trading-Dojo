@@ -13,7 +13,11 @@ import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
+import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Posts } from './screens/Community/CommunityPages/Posts';
+import { Chat } from './screens/Community/CommunityPages/Chat';
+import { useRoute } from '@react-navigation/native';
 
 
 const Tab = createBottomTabNavigator();
@@ -57,8 +61,15 @@ export default function App() {
             <Stack.Screen
               name="Glossary"
               component={Glossary}
-              options={{ title: 'Glossary' }}
+              options={{ title: 'Glossary', fullScreenGestureEnabled: true }}
             />
+
+            <Stack.Screen
+            name="CommunityDetailTabs"
+            component={CommunityDetailTabs}
+            options={{ title: "", gestureEnabled: true }}
+            />
+
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -99,3 +110,16 @@ const MainTabs = () => (
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
 );
+
+const CommunityDetailTabs = () => {
+  const route = useRoute();
+  const { id } = route.params;
+
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Details" component={CommunityDetail} initialParams={{ id }} />
+      <Tab.Screen name="Posts" component={Posts} initialParams={{ id }} />
+      <Tab.Screen name="Chat" component={Chat} initialParams={{ id }} />
+    </Tab.Navigator>
+  );
+};
