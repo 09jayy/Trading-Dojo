@@ -10,7 +10,7 @@ import Constants from 'expo-constants';
 import { getPriceChangesWithTime } from './functions';
 import {Graph} from './Graph';
 import {db} from '../../components/Config/firebaseConfig'; 
-import {collection, getDocs} from 'firebase/firestore'; 
+import {doc, getDocs, getDoc} from 'firebase/firestore'; 
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const extra = Constants.expoConfig?.extra ?? {}; 
@@ -26,6 +26,7 @@ export const Dashboard = () => {
     const navigation = useNavigation();
     const {setSignedIn} = useContext(signedInContext);
     const [userId, setUserId] = useState(''); 
+    const [ownedShares, setOwnedShares] = useState({}); 
 
     useEffect(() => {
       const getUserId = async () => {
@@ -44,6 +45,32 @@ export const Dashboard = () => {
     
       getUserId(); 
     }, []);
+
+    useEffect(() => {
+      const getOwnedShares = async () => {
+        if (!userId) return;
+        try {
+          console.log('get owned shares')
+          const docRef = doc(db,'users', userId); 
+          const docSnap = await getDoc(docRef); 
+
+          if (docSnap.exists()) {
+            console.log("Document data:", docSnap.data());
+          } else {
+            // docSnap.data() will be undefined in this case
+            console.log("No such document!");
+          } 
+          setOwnedShares(JSON.stringify(docSnap.data(), null, 2));
+        } catch (error) {
+          console.error(error); 
+        }
+      }
+      getOwnedShares(); 
+    },[userId])
+
+    useEffect(()=>{
+      console.log(ownedShares)
+    },[ownedShares]); 
 
     useLayoutEffect(() => {
         navigation.setOptions({
