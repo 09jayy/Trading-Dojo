@@ -1,14 +1,22 @@
 import React from 'react';
 import { View, Text, StyleSheet, ScrollView } from 'react-native'
 import { Entypo } from '@expo/vector-icons';
+import { Image } from 'react-native';
+
 
 
 export const StockSpecific = ({ route }) => {
   const { stock } = route.params;
+  console.log("HELLLOOOOOOOOOOOOOOOOOOO" + stock.image);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
       <View style={styles.box}>
+      <Image
+          source={{ uri: stock.image }}
+          style={styles.image}
+        />
+
         <Text style={styles.title}>{stock.name}</Text>
         <Text style={styles.text}>-</Text>
         <Text style={styles.subtitle}>{stock.symbol.toUpperCase()}</Text>
@@ -19,19 +27,6 @@ export const StockSpecific = ({ route }) => {
         {new Intl.NumberFormat('en-US', { style: 'currency', currency: 'USD' }).format(stock.current_price)}
       </Text>
       </View>
-
-      <View style={styles.button}>
-        <Text style={styles.text}>Buy</Text>
-      </View>
-
-      <View style={styles.graph}>
-        <Text style={styles.text}>Graph Placeholder</Text>
-      </View>
-
-      <View style={styles.timeline}>
-        <Text style={styles.text}>Timeline</Text>
-      </View>
-
       <View style={styles.stats}>
         <Text style={styles.performance}>
           7 Day Change: {stock.price_change_percentage_7d_in_currency.toFixed(2)}%
@@ -50,6 +45,20 @@ export const StockSpecific = ({ route }) => {
           }
         />
       </View>
+
+      <View style={styles.button}>
+        <Text style={styles.text}>Buy</Text>
+      </View>
+
+      <View style={styles.graph}>
+        <Text style={styles.text}>Graph Placeholder</Text>
+      </View>
+
+      <View style={styles.timeline}>
+        <Text style={styles.text}>Timeline</Text>
+      </View>
+
+      
     </ScrollView>
   );
 };
@@ -105,6 +114,7 @@ const styles = StyleSheet.create({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
+    marginBottom: 10,
   },
   text: {
     fontSize: 16,
@@ -121,8 +131,16 @@ const styles = StyleSheet.create({
   },
   subtitle: {
     fontSize: 18,
-    color: "#A9ABB1",
+    color: "#A8AFB1",
   },
+  image: {
+    height: 48,
+    width: 48,
+    borderRadius: 24,
+    resizeMode: 'contain',
+    paddingRight: 10,
+  }
+  
 
 });
 
