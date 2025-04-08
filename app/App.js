@@ -60,12 +60,13 @@ export default function App() {
             <Stack.Screen
               name="Glossary"
               component={Glossary}
-              options={{ title: 'Glossary' }}
+              options={{ title: 'Glossary', fullScreenGestureEnabled: true }}
             />
 
             <Stack.Screen
-            name="CommunityDetails"
+            name="CommunityDetailTabs"
             component={CommunityDetailTabs}
+            options={{ title: "", fullScreenGestureEnabled: true }}
             />
 
           </Stack.Navigator>

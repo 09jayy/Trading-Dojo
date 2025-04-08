@@ -61,7 +61,7 @@ export const JoinedCommunities = () => {
                     data={communities}
                     keyExtractor={item => item.id}
                     renderItem={({item}) => <View>
-                        <TouchableOpacity onPress={() => navigation.navigate('CommunityDetails', {id: item.id})}><Text>{item.name}</Text></TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.navigate('CommunityDetailTabs', {id: item.id})}><Text>{item.name}</Text></TouchableOpacity>
                     </View>}
                 />
             </View>
