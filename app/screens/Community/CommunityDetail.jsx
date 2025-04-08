@@ -30,7 +30,6 @@ useEffect(() => {
             <View>
             <Text>Community Name: {community.name}</Text>
             <Text>Members: {community.members.length}</Text>
-            <Text>Description: {community.}</Text>
             </View>
         ) : (
             <Text>Loading...</Text>

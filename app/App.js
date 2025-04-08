@@ -15,6 +15,8 @@ import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
 import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Posts } from './screens/Community/CommunityPages/Posts';
+import { Chat } from './screens/Community/CommunityPages/Chat';
 
 
 const Tab = createBottomTabNavigator();
@@ -63,8 +65,7 @@ export default function App() {
 
             <Stack.Screen
             name="CommunityDetails"
-            component={CommunityDetail}
-            options={{ title: 'CommunityDetails' }}
+            component={CommunityDetailTabs}
             />
 
           </Stack.Navigator>
@@ -105,5 +106,12 @@ const MainTabs = () => (
     <Tab.Screen name="Communities" component={CommunityView} />
     <Tab.Screen name="Joined Communities" component={JoinedCommunities} />
     <Tab.Screen name="Profile" component={Profile} />
+  </Tab.Navigator>
+);
+
+const CommunityDetailTabs = () => (
+  <Tab.Navigator>
+    <Tab.Screen name="Posts" component={Posts} />
+    <Tab.Screen name="Chat" component={Chat} />
   </Tab.Navigator>
 );
