@@ -90,3 +90,25 @@ const barData = await stockApiCaller.fetchPreviousBarData(['TSLA','AAPL'])
   ]
 }
 ```
+
+## `.fetchBarDataTimeFrame(symbol: string, timeframe: '1Min' | '15Min' | '1Hour' | '1Day', {start: <RFC-3339-date-string>, end: <RFC-3339-date-string>, limit: number})`
+
+start and end allow: filtering data equal to or before this time in RFC-3339 format. Fractions of a second are not accepted.
+
+returns
+```javascript
+{
+  bars: [
+    {
+      c: number,    // close price
+      h: number,    // highest price
+      l: number,    // lowest price
+      n: number,    // number of trades
+      o: number,    // open price
+      t: datetime,  // time stamp in  RFC-3339 format with nanosecond precision
+      v: number,    // volumne
+      vw: number    // volume weighted average price
+    }
+  ]
+}
+```

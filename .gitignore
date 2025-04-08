@@ -40,3 +40,5 @@ yarn-error.*
 
 # firebase .json
 serviceAccountKey.json
+
+stockapicaller-test.js

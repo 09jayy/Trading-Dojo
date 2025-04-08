@@ -156,6 +156,35 @@ class AlpacaApiService extends IApiService {
             throw error; 
         }
     }
+
+    async fetchBarDataTimeFrame(symbol, timeframe, apiKey, secretKey, {start = null, end = null, limit=null} = {}) {
+        let url = `https://data.alpaca.markets/v2/stocks/${symbol}/bars?timeframe=${timeframe}`
+        if (start) { url = url + `&start=${start}`}; 
+        if (end) { url = url + `&end=${end}`}; 
+        if (limit) {url = url + `&limit${limit}`}; 
+
+        try {
+            const response = await fetch(url, {
+                method: 'GET',
+                headers:  {
+                    'Authorization': `Bearer ${apiKey}`,
+                    'APCA-API-KEY-ID': apiKey,
+                    'APCA-API-SECRET-KEY': secretKey
+                }
+            }); 
+
+            if (!response.ok) {
+                const errorBody = await response.text(); 
+                throw new Error(`Request failed with status ${response.status}: ${errorBody}`);
+            }
+
+            const data = await response.json(); 
+
+            return data; 
+        } catch (error) {
+            throw error; 
+        }
+    }
 }
 
 module.exports = AlpacaApiService;
