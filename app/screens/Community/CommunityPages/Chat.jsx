@@ -1,4 +1,4 @@
-import { View, Text, Button, TextInput, FlatList } from 'react-native'
+import { View, Text, Button, TextInput, FlatList, TouchableOpacity } from 'react-native'
 import { styles } from '../../../screens/Sign/StyleSheet'
 import { db, auth } from '../../../components/Config/firebaseConfig'
 import { useEffect, useState, useRef } from 'react'
@@ -122,7 +122,10 @@ export const Chat = ({ route }) => {
                     value={input}
                     onChangeText={setInput}
                 />
-                <Button title="Send" style={styles.button && styles.messageInput} onPress={sendMessage} />
+
+                <TouchableOpacity style={styles.button} onPress={() => sendMessage()}>
+                    <Text style={styles.buttonText}>Send</Text>
+                </TouchableOpacity>
             </View>
         </View>
     )
