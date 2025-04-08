@@ -58,7 +58,8 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     messsageContainer: {
-        maxHeight: '50%',
+        maxHeight: '80%',
+        minHeight: '50%',
     },
     sent: {
         backgroundColor: 'lightgray',

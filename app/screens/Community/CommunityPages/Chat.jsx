@@ -9,8 +9,25 @@ export const Chat = ({ route }) => {
     const { id } = route.params
     const [messages, setMessages] = useState([])
     const [input, setInput] = useState('')
-    const [CurrentID, setCurrentID] = useState("Yc1m8LbeyCaC8ZkdN5oav7zANJD3")
     const flatListRef = useRef(null)
+    const [currentUid, setCurrentUid] = useState(null)
+
+    useEffect(() => {
+        const fetchUserData = async () => {
+            try {
+                const user = JSON.parse(await AsyncStorage.getItem('user'));
+                const uid = user.uid;
+                setCurrentUid(uid);
+                console.log("User ID: ", uid);
+                console.log(user.uid);
+            } catch (error) {
+                console.error("Error fetching user data: ", error);
+            }
+        }
+        fetchUserData();
+    }
+    ,[]);
+
 
     useEffect(() => {
         const messagesRef = collection(db, "Communities", id, "chat")
@@ -35,7 +52,7 @@ export const Chat = ({ route }) => {
     function ChatMessage(props) {
         const { text, uid } = props.message
         
-        const isCurrentUser = uid === CurrentID // implement later currently only for chattest@gmail.com pass is password
+        const isCurrentUser = uid === currentUid// implement later currently only for chattest@gmail.com pass is password
 
         print(isCurrentUser === true ? "styles.sent" : "styles.received")
 
@@ -51,13 +68,11 @@ export const Chat = ({ route }) => {
             return
         }
 
-        const uid = CurrentID // implement later currently only for chattest@gmail.com pass is password
-
         try {
             const messageRef = collection(db, 'Communities', id, 'chat');
             await addDoc(messageRef, {
                 text: input,
-                uid: uid,
+                uid: currentUid,
                 createdAt: serverTimestamp(),
             });
         } catch (error) {
@@ -69,9 +84,13 @@ export const Chat = ({ route }) => {
 
     useEffect(() => {
         if (flatListRef.current && messages.length > 0) {
-            flatListRef.current.scrollToEnd({ animated: true })
+            flatListRef.current.scrollToEnd({})
         }
     }, [messages.length])
+
+    const test = () => {
+        console.log(currentUid)
+    }
 
     return (
         <View style={styles.chatContainer}>
@@ -91,7 +110,7 @@ export const Chat = ({ route }) => {
                     value={input}
                     onChangeText={setInput}
                 />
-                <Button title="Send" style={styles.button} onPress={sendMessage} />
+                <Button title="Send" style={styles.button && styles.messageInput} onPress={sendMessage} />
             </View>
         </View>
     )
