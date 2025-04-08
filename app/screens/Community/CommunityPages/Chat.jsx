@@ -4,6 +4,7 @@ import { db, auth } from '../../../components/Config/firebaseConfig'
 import { useEffect, useState, useRef } from 'react'
 import { collection, getDocs, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
+import { doc, getDoc } from 'firebase/firestore'
 
 export const Chat = ({ route }) => {
     const { id } = route.params
@@ -55,9 +56,25 @@ export const Chat = ({ route }) => {
 
         return (
             <View style={isCurrentUser === true ? styles.sent : styles.received}>
+                <Text style={isCurrentUser === true ? styles.sentName : styles.receivedName}>{getUsername(uid)}</Text>
                 <Text style={isCurrentUser === true ? styles.sentText : styles.receivedText}>{text}</Text>
             </View>
         )
+    }
+
+    const getUsername = async (uid) => {
+        try {
+            const userRef = doc(db, 'users', uid);
+            const docSnap = await getDoc(userRef);
+            if (docSnap.exists()) {
+                return docSnap.data().name;
+            } else {
+                return "guest";
+            }
+        } catch (error) {
+            console.error("Error getting username: ", error);
+            return "guest";
+        }
     }
 
     const sendMessage = async() => {
