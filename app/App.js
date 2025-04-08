@@ -18,7 +18,7 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Posts } from './screens/Community/CommunityPages/Posts';
 import { Chat } from './screens/Community/CommunityPages/Chat';
 import { useRoute } from '@react-navigation/native';
-
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
@@ -102,7 +102,35 @@ const AuthTabs = () => (
 
 // Signed-in tab navigator (Dashboard, Profile, etc.)
 const MainTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({route}) => ({
+      headerShown: true,
+      tabBarIcon: ({color, size}) => {
+        let iconName; 
+        switch (route.name) {
+          case 'Investments':
+            iconName = 'attach-money';
+            break;
+          case 'Stock Market':
+            iconName = 'shopping-basket';
+            break; 
+          case 'Communities':
+            iconName='people';
+            break; 
+          case 'Joined Communities':
+            iconName = 'house';
+            break; 
+          case 'Profile': 
+            iconName = 'person';
+            break; 
+          default:
+            iconName = 'check-box-outline-blank'
+            break; 
+        }
+        return <MaterialIcons name={iconName} size={size} color={color} />
+      }
+    })}
+  >
     <Tab.Screen name="Investments" component={Dashboard} />
     <Tab.Screen name="Stock Market" component={StockMarket} />
     <Tab.Screen name="Communities" component={CommunityView} />
