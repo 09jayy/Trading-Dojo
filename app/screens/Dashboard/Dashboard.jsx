@@ -24,63 +24,43 @@ export const Dashboard = () => {
     const {setSignedIn} = useContext(signedInContext);
     const [ownedShares, setOwnedShares] = useState({}); 
     const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
+    const [refreshing, setRefreshing] = useState(false); 
 
-    useEffect(()=>{
-      // load user id and owned shares
-      const loadUserData = async () => {
-        // load user id from async storage
+    const fetchData = async () => {
+      setRefreshing(true);
+      try {
+        // 1. Fetch user ID
         const uid = await fetchUserId();
-
-        // load owned shares from firestore
+        
+        // 2. Fetch owned shares
         const owned = await fetchOwnedShares(uid);
-        setOwnedShares(owned.ownedShares); 
+        setOwnedShares(owned.ownedShares || {});
+        
+        // 3. Process each stock to generate graph data
+        const newShareWorth = {};
+        for (const symbol in owned.ownedShares) {
+          const priceChange = await getPriceChangesWithTime(
+            stockApiCaller, 
+            symbol,
+            '1Hour', 
+            { start: owned.ownedShares[symbol][0].time }
+          );
+          newShareWorth[symbol] = getShareWorthOvertime(
+            owned.ownedShares[symbol], 
+            priceChange
+          );
+        }
+        setSharesWorthOvertime(newShareWorth);
+      } catch (error) {
+        console.error('Refresh error:', error);
+      } finally {
+        setRefreshing(false);
       }
-      loadUserData()
-    },[])
-
-
+    };
 
     useEffect(() => {
-      const loadShareWorthData = async () => {
-        if (!ownedShares || Object.keys(ownedShares).length === 0) return;
-    
-        try {
-          const newShareWorth = {};
-          
-          // Process each symbol sequentially
-          for (const symbol in ownedShares) {
-            if (!ownedShares[symbol]?.length) continue;
-    
-            try {
-              const priceChange = await getPriceChangesWithTime(
-                stockApiCaller, 
-                symbol,
-                '1Hour', 
-                { start: ownedShares[symbol][0].time }
-              );
-    
-              if (priceChange?.length) {
-                newShareWorth[symbol] = getShareWorthOvertime(
-                  ownedShares[symbol], 
-                  priceChange
-                );
-              }
-            } catch (error) {
-              console.error(`Failed processing ${symbol}:`, error);
-            }
-          }
-    
-          setSharesWorthOvertime(prev => ({
-            ...prev,
-            ...newShareWorth
-        }));
-        } catch (error) {
-          console.error("Failed loading share worth data:", error);
-        }
-      };
-    
-      loadShareWorthData();
-  }, [ownedShares, stockApiCaller]);
+      fetchData();
+    }, []);
 
   useEffect(() => {
       console.log("Owned Shares:", ownedShares);
@@ -145,6 +125,15 @@ export const Dashboard = () => {
                 />
               </View>
             ))}
+
+            {/* Add this at the bottom of your ScrollView */}
+            <TouchableOpacity 
+              onPress={fetchData}
+              disabled={refreshing}
+            >
+              <Text>{refreshing ? 'Refreshing...' : 'Refresh Data'}</Text>
+            </TouchableOpacity>
+
           </ScrollView>
         </SafeAreaView>
       );
