@@ -8,7 +8,7 @@ export const fetchUserId = async () => {
         const userString = await AsyncStorage.getItem('user');
         return userString ? JSON.parse(userString).uid : null;
     } catch (error) {
-        console.error("🚨 Error fetching user ID:", error);
+        console.error("Error fetching user ID:", error);
         return null;
     }
 };
@@ -16,25 +16,13 @@ export const fetchUserId = async () => {
 export const fetchOwnedShares = async (userId) => {
     if (!userId) return {};
     try {
-        console.log('📥 Fetching owned shares...');
+        console.log('Fetching owned shares...');
         const docSnap = await getDoc(doc(db, 'users', userId));
         return docSnap.exists() ? docSnap.data() : {};
     } catch (error) {
-        console.error("🚨 Error fetching owned shares:", error);
+        console.error("Error fetching owned shares:", error);
         return {};
     }
-};
-
-export const fetchShareWorthOvertime = async (ownedShares, stockApiCaller) => {
-    const firstStock = Object.keys(ownedShares)[0];
-    if (!firstStock || !ownedShares[firstStock]?.length) return { times: [], shareWorths: [] };
-
-    console.log(`📊 Fetching price changes for ${firstStock}...`);
-    const bars = await getPriceChangesWithTime(stockApiCaller, firstStock, '1Hour', {
-        start: ownedShares[firstStock][0].time,
-    });
-
-    return getShareWorthOvertime(ownedShares[firstStock], bars);
 };
 
 /**

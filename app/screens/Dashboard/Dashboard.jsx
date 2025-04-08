@@ -9,9 +9,6 @@ import StockApiCaller from 'stockapicaller';
 import Constants from 'expo-constants'; 
 import { getPriceChangesWithTime, getShareWorthOvertime, fetchUserId, fetchOwnedShares, fetchShareWorthOvertime } from './functions';
 import {Graph} from './Graph';
-import {db} from '../../components/Config/firebaseConfig'; 
-import {doc, getDocs, getDoc} from 'firebase/firestore'; 
-import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const extra = Constants.expoConfig?.extra ?? {}; 
 
@@ -86,8 +83,8 @@ export const Dashboard = () => {
   }, [ownedShares, stockApiCaller]);
 
   useEffect(() => {
-      console.log("📊 Owned Shares:", ownedShares);
-      console.log("📈 Share Worth Over Time:", sharesWorthOvertime);
+      console.log("Owned Shares:", ownedShares);
+      console.log("Share Worth Over Time:", sharesWorthOvertime);
   }, [ownedShares, sharesWorthOvertime]);
 
     useLayoutEffect(() => {
