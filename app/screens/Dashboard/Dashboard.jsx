@@ -1,4 +1,4 @@
-import React, { useContext, useLayoutEffect, useEffect } from 'react';
+import React, { useContext, useLayoutEffect, useEffect, useState } from 'react';
 import { View, Text, TouchableOpacity, ScrollView, StyleSheet} from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { signedInContext } from '../../AppContext';
@@ -11,6 +11,7 @@ import { getPriceChangesWithTime } from './functions';
 import {Graph} from './Graph';
 import {db} from '../../components/Config/firebaseConfig'; 
 import {collection, getDocs} from 'firebase/firestore'; 
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const extra = Constants.expoConfig?.extra ?? {}; 
 
@@ -24,6 +25,25 @@ const stockApiCaller = new StockApiCaller()
 export const Dashboard = () => {
     const navigation = useNavigation();
     const {setSignedIn} = useContext(signedInContext);
+    const [userId, setUserId] = useState(''); 
+
+    useEffect(() => {
+      const getUserId = async () => {
+        try {
+          const userString = await AsyncStorage.getItem('user'); 
+          if (userString) {
+            const user = JSON.parse(userString); 
+            setUserId(user.uid); 
+          } else {
+            console.warn("No user found in storage, check async storage of user data at signing in");
+          }
+        } catch (error) {
+          console.error("Error fetching user ID:", error); 
+        }
+      };
+    
+      getUserId(); 
+    }, []);
 
     useLayoutEffect(() => {
         navigation.setOptions({
