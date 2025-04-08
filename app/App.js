@@ -13,6 +13,7 @@ import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
+import { StockPage } from './screens/StockMarket/StockPage';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
 
@@ -59,6 +60,11 @@ export default function App() {
               component={Glossary}
               options={{ title: 'Glossary' }}
             />
+            {/* Stock Page is outside the tabs */}
+             <Stack.Screen 
+             name="StockPage" 
+             component={StockPage} 
+             options={{ title: 'Stock Page' }}/>
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
