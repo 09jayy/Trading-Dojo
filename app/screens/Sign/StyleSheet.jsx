@@ -52,4 +52,26 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         backgroundColor: 'transparent', 
     },
+    sent: {
+        backgroundColor: 'lightgray',
+        padding: 10,
+        borderRadius: 10,
+        marginVertical: 5,
+        marginLeft: 'auto',
+        maxWidth: '80%',
+    },
+    sentText: {
+        color: '#000',
+    },
+    received: {
+        backgroundColor: '#0041a8',
+        padding: 10,
+        borderRadius: 10,
+        marginVertical: 5,
+        marginRight: 'auto',
+        maxWidth: '80%',
+    },
+    receivedText: {
+        color: '#fff',
+    },
 });
