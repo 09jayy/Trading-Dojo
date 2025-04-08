@@ -67,7 +67,7 @@ export default function App() {
             <Stack.Screen
             name="CommunityDetailTabs"
             component={CommunityDetailTabs}
-            options={{ title: "", fullScreenGestureEnabled: true }}
+            options={{ title: "", gestureEnabled: true }}
             />
 
           </Stack.Navigator>

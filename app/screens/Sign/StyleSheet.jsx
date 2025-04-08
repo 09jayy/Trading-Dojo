@@ -52,13 +52,23 @@ export const styles = StyleSheet.create({
         fontSize: 14,
         backgroundColor: 'transparent', 
     },
+    chatContainer: {
+        flex: 1,
+        padding: 10,
+        backgroundColor: '#fff',
+    },
+    messsageContainer: {
+        maxHeight: '50%',
+    },
     sent: {
         backgroundColor: 'lightgray',
         padding: 10,
         borderRadius: 10,
         marginVertical: 5,
         marginLeft: 'auto',
-        maxWidth: '80%',
+        marginRight: "10%",
+        maxWidth: '70%',
+        alignSelf: 'flex-end',
     },
     sentText: {
         color: '#000',
@@ -69,7 +79,9 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 5,
         marginRight: 'auto',
-        maxWidth: '80%',
+        marginLeft: "10%",
+        maxWidth: '70%',
+        alignSelf: 'flex-start',
     },
     receivedText: {
         color: '#fff',
