@@ -9,7 +9,7 @@ const { alpacaApiKey, alpacaSecretKey } = extra;
 
 const StockApiCaller = require('stockapicaller');
 
-
+const stockList = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'AMZN', 'GOOGL', 'META', 'PLTR','AMD', 'JPM', 'IBM']
 const getTrendingStocks = async () => {
   const result = await fetch('https://query1.finance.yahoo.com/v1/finance/trending/US');
   const data = await result.json();
@@ -17,7 +17,7 @@ const getTrendingStocks = async () => {
   if (data.finance.result && data.finance.result[0] && data.finance.result[0].quotes) {
     return data.finance.result[0].quotes.map((q) => q.symbol);
   } else {
-    console.error('Unexpected data structure:', data);
+    console.log('Unexpected data structure:', data);
     return [];
   }
 };
@@ -65,7 +65,7 @@ const getChange = async (symbol) => {
 
     return closePrice;
   } catch (err) {
-    console.error(`Error getting change for ${symbol}:`, err.message || err);
+    console.log(`Error getting change for ${symbol}:`, err.message || err);
     return null;
   }
 };
@@ -97,7 +97,7 @@ export const StockMarket = () => {
   const navigation = useNavigation();
   useEffect(() => {
     const fetchStockData = async () => {
-      const symbols = await getTrendingStocks();
+      const symbols = stockList
       const stockData = await Promise.all(symbols.map(async (symbol) => {
         const price = await getPrice(symbol);
         const change = await getChange(symbol);
