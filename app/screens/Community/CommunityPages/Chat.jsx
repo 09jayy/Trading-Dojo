@@ -5,6 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { collection, getDocs, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { doc, getDoc } from 'firebase/firestore'
+import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry'
 
 export const Chat = ({ route }) => {
     const { id } = route.params
@@ -48,7 +49,7 @@ export const Chat = ({ route }) => {
     });
 
     function ChatMessage(props) {
-        const { text, uid } = props.message
+        const { text, uid, name } = props.message
         
         const isCurrentUser = uid === currentUid// implement later currently only for chattest@gmail.com pass is password
 
@@ -56,25 +57,10 @@ export const Chat = ({ route }) => {
 
         return (
             <View style={isCurrentUser === true ? styles.sent : styles.received}>
-                <Text style={isCurrentUser === true ? styles.sentName : styles.receivedName}>{getUsername(uid)}</Text>
+                <Text style={isCurrentUser === true ? styles.sentName : styles.receivedName}>{name}</Text>
                 <Text style={isCurrentUser === true ? styles.sentText : styles.receivedText}>{text}</Text>
             </View>
         )
-    }
-
-    const getUsername = async (uid) => {
-        try {
-            const userRef = doc(db, 'users', uid);
-            const docSnap = await getDoc(userRef);
-            if (docSnap.exists()) {
-                return docSnap.data().name;
-            } else {
-                return "guest";
-            }
-        } catch (error) {
-            console.error("Error getting username: ", error);
-            return "guest";
-        }
     }
 
     const sendMessage = async() => {
@@ -87,6 +73,7 @@ export const Chat = ({ route }) => {
             await addDoc(messageRef, {
                 text: input,
                 uid: currentUid,
+                name: await getUsername(),
                 createdAt: serverTimestamp(),
             });
         } catch (error) {
@@ -94,6 +81,17 @@ export const Chat = ({ route }) => {
         }
 
         setInput('')
+    }
+
+    const getUsername = async () => {
+        const userRef = doc(db, 'users', currentUid)
+        const userSnap = await getDoc(userRef)
+        if (userSnap.exists()) {
+            return userSnap.data().name
+        } else {
+            console.log('No such document!')
+            return ''
+        }
     }
 
     useEffect(() => {
