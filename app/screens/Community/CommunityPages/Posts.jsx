@@ -41,7 +41,7 @@ export const Posts = ({ route }) => {
             keyExtractor={item => item.id}
             renderItem={({ item }) => (
             <View style={styles.postContainer}>
-                <Text style={styles.postTitle}>{item.Title} {item.CreatedBy}</Text>
+                <Text style={styles.postTitle}>{item.Title}</Text>
                 <Text style={styles.postAuthor}>{item.CreatedBy}</Text>
                 <Text style={styles.postContent}>{item.Content}</Text>
             </View>
