@@ -42,6 +42,7 @@ export const SignUp = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Email..."
+                    placeholderTextColor="#888"
                     value={email}
                     onChangeText={setEmail}
                 />
@@ -49,6 +50,7 @@ export const SignUp = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Password..."
+                    placeholderTextColor="#888"
                     value={password}
                     onChangeText={setPassword}
                     secureTextEntry={true}
@@ -57,6 +59,7 @@ export const SignUp = () => {
                 <TextInput
                     style={styles.input}
                     placeholder="Confirm Password..."
+                    placeholderTextColor="#888"
                     value={passwordConfirmation}
                     onChangeText={setPasswordConfirmation}
                     secureTextEntry={true}
