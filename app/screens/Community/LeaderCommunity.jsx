@@ -85,6 +85,11 @@ export const LeaderView = () => {
     try {
       const userRef = doc(db, "users", uid);
       const communityRef = doc(db, "Communities", id);
+      const communityDoc = await getDoc(communityRef);
+      const communityData = communityDoc.data();
+      if (communityData.createdBy === uid) {
+        return;
+      }
 
       setFilteredCommunities((prevCommunities) =>
         prevCommunities.map((community) =>
@@ -125,7 +130,8 @@ export const LeaderView = () => {
         const communityRef = collection(db, "Communities");
         const newCommunity = {
           name: newCommunityName,
-          members: [],
+          members: [uid],
+          createdBy: uid,
           createdAt: new Date(),
         };
         const docRef = await addDoc(communityRef, newCommunity);
