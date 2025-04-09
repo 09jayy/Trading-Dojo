@@ -55,19 +55,17 @@ export const styles = StyleSheet.create({
         padding: 12,
         borderRadius: 10,
         alignItems: 'center',
-        marginTop: 20,
+        marginTop: 100,
         marginBottom: 40
     },
     saveButton: {
-        width: '20%',
+        width: '80%',
         backgroundColor: '#0041a8',
         padding: 12,
         borderRadius: 10,
         alignItems: 'center',
-        alignSelf: 'flex-end',
         marginTop: 20,
-        marginRight: "10%",
-        marginBottom: 70
+        marginBottom: 20
     },
     buttonText: {
         color: 'white',
@@ -82,5 +80,46 @@ export const styles = StyleSheet.create({
         color: '#0041a8',
         fontSize: 14,
         backgroundColor: 'transparent', 
+    },
+    modalContainer: {
+        flex: 1,
+        backgroundColor: 'rgba(0,0,0,0.4)',
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    modalBox: {
+        backgroundColor: '#fff',
+        width: '80%',
+        padding: 20,
+        borderRadius: 12,
+        shadowColor: '#000',
+        shadowOpacity: 0.3,
+        shadowRadius: 10,
+        elevation: 10,
+    },
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: 'bold',
+        marginBottom: 10,
+        textAlign: 'center',
+    },
+    inputModal: {
+        borderWidth: 1,
+        borderColor: '#ccc',
+        padding: 10,
+        borderRadius: 8,
+        marginBottom: 10,
+    },
+    modalButtonRow: {
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+    },
+    modalButton: {
+        flex: 1,
+        marginHorizontal: 5,
+        padding: 10,
+        backgroundColor: '#0041a8',
+        borderRadius: 8,
+        alignItems: 'center',
     },
 });
