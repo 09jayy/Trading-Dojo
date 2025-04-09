@@ -48,7 +48,7 @@ export const StockWidget = ({stockSymbol,shareOrders}) => {
     const totalSpent = shareOrders.reduce((total, order) => {
         return order.tradeType === 'buy' 
             ? total + (order.sharePrice * order.shareQuantity)
-            : total - (order.sharePRice * order.shareQuantity);
+            : total - (order.sharePrice * order.shareQuantity);
     }, 0);
 
     return (
@@ -56,9 +56,9 @@ export const StockWidget = ({stockSymbol,shareOrders}) => {
             <Text style={styles.symbol}>{stockSymbol}</Text>
             <Text>Shared Owned - {totalShares}</Text>
             <View style={styles.stockInfo}>
-                <Text>Spent - £{totalSpent}</Text>
+                <Text>Spent - ${totalSpent.toFixed(2)}</Text>
                 <View style={styles.priceRow}>
-                <Text>Current Worth - £{totalShares * priceOf1Share}</Text>
+                <Text>Current Worth - ${(totalShares * priceOf1Share).toFixed(2)}</Text>
                 <Entypo
                       name={((totalShares * priceOf1Share) > totalSpent) ? "arrow-bold-up" : "arrow-bold-down"}
                       size={18}

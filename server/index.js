@@ -56,20 +56,21 @@ app.post('/order', async (req, res) => {
         }
 
         const latestTrade = await alpacaApiCaller.fetchLatestTradeOf(req.body.stockSymbol); 
-        console.log(latestTrade); 
+        console.log('TRADING AT PRICE', latestTrade); 
         const sharePrice = latestTrade.trade.p; 
+        const time = latestTrade.trade.t; 
         console.log('current price: ', sharePrice); 
 
         if (!req.body.limit) {
             const order = new MarketOrder(req.body); 
             try {
-                await order.execute(db,sharePrice);
+                await order.execute(db,sharePrice, time);
                 console.log('stock order completed');  
             } catch (error) {
                 console.error(error); 
             }
         }
-        res.status(201).json({success: true, message: 'order added'}); 
+        res.status(201).json({...req.body, sharePrice: sharePrice}); 
     } catch (error) {
         console.error("Error saving order:", error);
         res.status(500).json({ error: "Internal Server Error" });

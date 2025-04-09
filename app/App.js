@@ -1,4 +1,4 @@
-import { useEffect, useState} from 'react';
+import { use, useEffect, useState} from 'react';
 import { StatusBar } from 'react-native'; 
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -172,10 +172,43 @@ const CommunityDetailTabs = () => {
   const route = useRoute();
   const { role, id } = route.params;
 
+  const [isCreator, setIsCreator] = useState(false);
+  const [uid, setUid] = useState(null);
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      try {
+        const user = JSON.parse(await AsyncStorage.getItem('user'));
+        const uid = user.uid;
+        setUid(uid);
+      } catch (error) {
+        console.error("Error fetching user data: ", error);
+      }
+    };
+    fetchUserData();
+  }
+  , []);
+
+  useEffect(() => {
+    const fetchCommunityData = async () => {
+      try {
+        const communityRef = doc(db, 'Communities', id);
+        const communitySnap = await getDoc(communityRef);
+        const data = communitySnap.data();
+        if (data.createdBy === uid) {
+          setIsCreator(true);
+        }
+      } catch (error) {
+        console.error("Error fetching community data: ", error);
+      }
+    };
+    fetchCommunityData();
+  }, [uid, id]);
+
   return (
     <Tab.Navigator>
       <Tab.Screen name="Details" component={CommunityDetail} initialParams={{ id }} />
-      <Tab.Screen name="Posts" component={role === 'leader' ? LeaderPosts : Posts} initialParams={{ id }} />
+      <Tab.Screen name="Posts" component={role === 'leader' && isCreator? LeaderPosts : Posts} initialParams={{ id }} />
       <Tab.Screen name="Chat" component={Chat} initialParams={{ id }} />
     </Tab.Navigator>
   );
@@ -183,10 +216,31 @@ const CommunityDetailTabs = () => {
 
 const LeaderTabs = () => {
   return (
-    <Tab.Navigator>
-      <Tab.Screen name="Commsadasunities" component={LeaderView} />
-      <Tab.Screen name="Joidasdned Communities" component={LeaderJoined} />
-      <Tab.Screen name="Profasdaile" component={Profile} />
+    <Tab.Navigator
+     screenOptions={({route}) => ({
+      headerShown: true,
+      tabBarIcon: ({color, size}) => {
+        let iconName; 
+        switch (route.name) {
+          case 'Communities':
+            iconName='people';
+            break; 
+          case 'Joined Communities':
+            iconName = 'house';
+            break; 
+          case 'Profile': 
+            iconName = 'person';
+            break; 
+          default:
+            iconName = 'check-box-outline-blank'
+            break; 
+        }
+        return <MaterialIcons name={iconName} size={size} color={color} />
+      }
+    })}>
+      <Tab.Screen name="Communities" component={LeaderView} />
+      <Tab.Screen name="Joined Communities" component={LeaderJoined} />
+      <Tab.Screen name="Profile" component={Profile} />
     </Tab.Navigator>
   );
 }

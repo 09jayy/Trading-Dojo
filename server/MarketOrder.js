@@ -32,9 +32,10 @@ class MarketOrder extends IOrderStrategy {
      * 2. reduce account bank balance by money spent
      * @param {Object} db - references firebase firestore database 
      * @param {number} sharePrice - current fetched share price of stock to be used in order
+     * @param {string} time - time of share price fetched
      * @returns {void}
      */
-    async execute(db,sharePrice) {
+    async execute(db,sharePrice, time) {
         const costOfShares = sharePrice * this.shareQuantity; 
         try {
             const userRef = db.collection('users').doc(this.userId); 
@@ -70,7 +71,7 @@ class MarketOrder extends IOrderStrategy {
                     shareQuantity: this.shareQuantity,
                     sharePrice: sharePrice,
                     tradeType: this.tradeType, 
-                    created: Timestamp.now()
+                    created: time
                 }
 
                 // 1. adds shares to account , record amount of money spent buying that amount of shares

@@ -147,6 +147,60 @@ export const StockPage = ({ route }) => {
       ]
     );
   };
+
+
+const handleSellPress = () => {
+  const numQty = parseFloat(quantity);
+  if (isNaN(numQty) || numQty <= 0) {
+    Alert.alert('Invalid quantity', 'Please enter a valid number.');
+    return;
+  }
+
+  Alert.alert(
+    'Confirm Sale',
+    `Sell ${numQty} share(s) of ${stock.symbol}?`,
+    [
+      {
+        text: 'Cancel',
+        style: 'cancel',
+      },
+      {
+        text: 'Confirm',
+        onPress: async () => {
+          try {
+            const response = await fetch('https://trading-dojo.onrender.com/order', {
+              method: 'POST',
+              headers: {
+                'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                shareQuantity: numQty,
+                userId: uid,
+                stockSymbol: stock.symbol,
+                tradeType: 'sell',
+              }),
+            });
+
+            if (!response.ok) {
+              const errorData = await response.json();
+              throw new Error(errorData.message || 'Request failed');
+            }
+
+            Alert.alert(
+              'Order Placed',
+              `You sold ${numQty} share(s) of ${stock.symbol}`
+            );
+            console.log(`Sell order success: ${numQty} shares of ${stock.symbol}`);
+          } catch (error) {
+            console.error('Sell error:', error.message);
+            Alert.alert('Error', error.message || 'Failed to place sell order');
+          }
+        },
+      },
+    ]
+  );
+};
+
   
   
 
@@ -195,6 +249,11 @@ export const StockPage = ({ route }) => {
       {/* Buy Button */}
       <TouchableOpacity style={styles.buyButton} onPress={handleBuyPress}>
         <Text style={styles.buyButtonText}>Buy</Text>
+      </TouchableOpacity>
+
+      {/* Sell Button */}
+      <TouchableOpacity style={styles.sellButton} onPress={handleSellPress}>
+        <Text style={styles.sellButtonText}>Sell</Text>
       </TouchableOpacity>
 
       <View style={styles.graphBox}>
@@ -382,6 +441,7 @@ const styles = StyleSheet.create({
     color: '#212529',
     fontWeight: '500',
   },
+  
   detailRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
@@ -390,8 +450,9 @@ const styles = StyleSheet.create({
     borderBottomColor: '#E9ECEF',
     borderBottomWidth: 1,
   },
+  
   chartWrapper: {
-    backgroundColor: '#f2f2f2', // Softer grey than default
+    backgroundColor: '#f2f2f2', 
     borderRadius: 12,
     padding: 12,
     marginHorizontal: 16,
@@ -401,5 +462,18 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 4,
     elevation: 2,
+  },
+
+  sellButton: {
+    backgroundColor: '#DC3545',
+    paddingVertical: 16,
+    borderRadius: 10,
+    alignItems: 'center',
+    marginBottom: 24,
+  },
+  sellButtonText: {
+    color: '#FFFFFF',
+    fontSize: 18,
+    fontWeight: '600',
   },
 });

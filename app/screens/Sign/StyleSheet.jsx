@@ -58,8 +58,9 @@ export const styles = StyleSheet.create({
         backgroundColor: '#fff',
     },
     messsageContainer: {
-        maxHeight: '80%',
+        maxHeight: '90%',
         minHeight: '50%',
+        marginBottom: "2%",
     },
     sent: {
         backgroundColor: 'lightgray',
@@ -67,9 +68,10 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 5,
         marginLeft: 'auto',
-        marginRight: "10%",
+        marginRight: "4%",
         maxWidth: '70%',
         alignSelf: 'flex-end',
+        borderBottomRightRadius: 0,
     },
     sentText: {
         color: '#000',
@@ -80,9 +82,10 @@ export const styles = StyleSheet.create({
         borderRadius: 10,
         marginVertical: 5,
         marginRight: 'auto',
-        marginLeft: "10%",
+        marginLeft: "5%",
         maxWidth: '70%',
         alignSelf: 'flex-start',
+        borderBottomLeftRadius: 0,
     },
     receivedText: {
         color: '#fff',
@@ -94,5 +97,25 @@ export const styles = StyleSheet.create({
     receivedName: {
         fontWeight: 'bold',
         color: '#fff',
+    },
+    inputContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingHorizontal: "5%",
+        marginBottom: "8%",
+    },
+    msgInput: {
+        flex: 1,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 10,
+        padding: 10,
+        marginRight: 10,
+    },
+    msgButton: {
+        backgroundColor: '#0041a8',
+        padding: 10,
+        borderRadius: 10,
     },
 });
