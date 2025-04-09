@@ -197,9 +197,9 @@ export const StockPage = ({ route }) => {
         <Text style={styles.buyButtonText}>Buy</Text>
       </TouchableOpacity>
 
-      {/* Graph Placeholder */}
       <View style={styles.graphBox}>
         {chartData ? (
+          <View style={styles.chartWrapper}>
           <LineChart
             data={chartData}
             width={Dimensions.get('window').width - 40}
@@ -207,6 +207,7 @@ export const StockPage = ({ route }) => {
             withDots={false}
             withInnerLines={false}
             withShadow={false}
+            formatYLabel={(yValue) => `$${parseFloat(yValue).toFixed(0)}`}
             chartConfig={{
               backgroundGradientFrom: '#f8f9fa',
               backgroundGradientTo: '#f8f9fa',
@@ -214,7 +215,7 @@ export const StockPage = ({ route }) => {
               color: (opacity = 1) => `rgba(0, 123, 255, ${opacity})`,
               labelColor: (opacity = 1) => `rgba(33, 37, 41, ${opacity})`,
               style: {
-                borderRadius: 12,
+                borderRadius: 8,
               },
               propsForDots: {
                 r: '2',
@@ -223,9 +224,10 @@ export const StockPage = ({ route }) => {
               },
             }}
             style={{
-              borderRadius: 12,
+              borderRadius: 8,
             }}
           />
+        </View>
         ) : (
           <Text style={styles.graphText}>Loading graph...</Text>
         )}
@@ -387,5 +389,17 @@ const styles = StyleSheet.create({
     paddingVertical: 6,
     borderBottomColor: '#E9ECEF',
     borderBottomWidth: 1,
+  },
+  chartWrapper: {
+    backgroundColor: '#f2f2f2', // Softer grey than default
+    borderRadius: 12,
+    padding: 12,
+    marginHorizontal: 16,
+    marginVertical: 12,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 1 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 2,
   },
 });
