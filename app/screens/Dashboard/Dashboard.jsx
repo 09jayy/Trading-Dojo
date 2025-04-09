@@ -36,6 +36,7 @@ export const Dashboard = () => {
     const [ownedShares, setOwnedShares] = useState({}); 
     const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
     const [refreshing, setRefreshing] = useState(false); 
+    const [timeframeSelect, setTimeFrameSelect] = useState('1Hour')
 
     useEffect(() => {
         const fetchOrInitBalance = async () => {
@@ -81,7 +82,7 @@ export const Dashboard = () => {
           const priceChange = await getPriceChangesWithTime(
             stockApiCaller, 
             symbol,
-            '1Hour', 
+            timeframeSelect, 
             { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
           );
           newShareWorth[symbol] = getShareWorthOvertime(
@@ -99,7 +100,7 @@ export const Dashboard = () => {
 
     useEffect(() => {
       fetchData();
-    }, []);
+    }, [timeframeSelect]);
 
   useEffect(() => {
       console.log("Owned Shares:", ownedShares);
@@ -143,8 +144,13 @@ export const Dashboard = () => {
             ))}
     
             <Text style={styles.graphNotice}>
-              overall portfolio performance graph (scroll down to view more)
+              Portfolio Performance Graph
             </Text>
+
+            <View style={styles.timeframeControls}>
+              <TouchableOpacity onPress={() => {setTimeFrameSelect('1Day'); }}><Text>1Day</Text></TouchableOpacity>
+              <TouchableOpacity onPress={()=> {setTimeFrameSelect('1Hour'); }}><Text>1Hour</Text></TouchableOpacity>
+            </View>
 
             {Object.entries(sharesWorthOvertime).map(([symbol, data]) => (
               <View key={symbol}>
