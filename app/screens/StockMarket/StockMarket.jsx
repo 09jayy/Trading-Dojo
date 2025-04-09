@@ -69,9 +69,43 @@ const getChange = async (symbol) => {
     return null;
   }
 };
+const getYesterdaysClose = async (symbol) => {
+  const StockApiCaller = require('stockapicaller');
+
+  const alpacaApiCaller = new StockApiCaller()
+    .setApiService('alpaca')
+    .setApiKey(alpacaApiKey)
+    .setSecretKey(alpacaSecretKey);
+
+  const today = new Date();
+  const yesterday = new Date(today);
+  yesterday.setDate(today.getDate() - 2);
+
+  const start = yesterday.toISOString().split('T')[0]; // YYYY-MM-DD
+  const end = start; // same day for 1 bar
+
+  try {
+    const bars = await alpacaApiCaller.fetchBarDataTimeFrame(symbol, '1Day', {
+      start: `${start}T00:00:00Z`,
+      end: `${start}T23:59:59Z`
+    });
+    console.log('yesterday',bars)
+    if (bars) {
+      const closingPrice = bars.bars[0].c;
+      
+      return closingPrice;
+    } else {
+      console.log(`No bar data returned for ${symbol} on ${start}`);
+      return null;
+    }
+  } catch (error) {
+    console.log(`Failed to get bar data for ${symbol}:`, error.message);
+    return null;
+  }
+};
 
 // Example usage
-getChange('TSLA');
+getYesterdaysClose('TSLA');
 
 
 const getStats = async (symbol) => {
@@ -100,7 +134,7 @@ export const StockMarket = () => {
       const symbols = stockList
       const stockData = await Promise.all(symbols.map(async (symbol) => {
         const price = await getPrice(symbol);
-        const change = await getChange(symbol);
+        const change = await getYesterdaysClose(symbol);
         const priceChange = ((price - change) / change) * 100;
         return {  
           symbol,
