@@ -33,10 +33,40 @@ export const styles = StyleSheet.create({
         paddingVertical: 10,
         paddingHorizontal: 20,
         borderRadius: 8,
-        color: '#0041a8'
+        color: '#0041a8',
     },
     buttonText: {
         color: '#fff',
         fontWeight: 'bold',
+    },
+    createCommunityContainer: {
+        marginTop: 20,
+        marginHorizontal: 10,
+        backgroundColor: '#f4f4f4',
+        borderRadius: 10,
+        padding: 15,
+        alignItems: 'center',
+    },
+    createCommunityButton: {
+        backgroundColor: '#0041a8',
+        paddingVertical: 12,
+        paddingHorizontal: 20,
+        borderRadius: 8,
+        marginBottom: 15,
+    },
+    createCommunityText: {
+        color: '#fff',
+        fontWeight: 'bold',
+        fontSize: 16,
+    },
+    inputNewCommunity: {
+        height: 50,
+        borderColor: '#ddd',
+        borderWidth: 1,
+        borderRadius: 10,
+        paddingHorizontal: 15,
+        fontSize: 16,
+        marginBottom: 15,
+        width: '100%',
     },
 });

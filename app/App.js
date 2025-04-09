@@ -18,6 +18,11 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import { Posts } from './screens/Community/CommunityPages/Posts';
 import { Chat } from './screens/Community/CommunityPages/Chat';
 import { useRoute } from '@react-navigation/native';
+import { doc, getDoc } from 'firebase/firestore';
+import { db } from './components/Config/firebaseConfig'; 
+import { LeaderView } from './screens/Community/LeaderCommunity'; 
+import { LeaderJoined } from './screens/Community/LeaderJoined';
+import { LeaderPosts } from './screens/Community/CommunityPages/LeaderPosts';
 
 
 const Tab = createBottomTabNavigator();
@@ -25,13 +30,17 @@ const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [signedIn, setSignedIn] = useState(false)
+  const [uid, setUid] = useState(null)
+  const [role, setRole] = useState(null)
 
   useEffect(() => {
     const checkIfSignedIn = async () => {
       try {
         const user = await AsyncStorage.getItem('user');
+        const userParse = JSON.parse(user);
         if (user) {
           setSignedIn(true);
+          setUid(userParse.uid)
           console.log("User session found:", JSON.parse(user));
         } else {
           console.log("No user session found");
@@ -43,6 +52,18 @@ export default function App() {
 
     checkIfSignedIn();
   }, [])
+
+  useEffect(() => {
+    const fetchUserRole = async () => {
+        const userId = uid
+        const userRef = doc(db, 'users', userId); // users collection, document = UID
+        const userSnap = await getDoc(userRef);
+        const data = userSnap.data();
+        setRole(data.role); 
+        console.log("User role fetched:", data.role);
+      };
+      fetchUserRole();
+    }, [uid]);
   
   return (
     <signedInContext.Provider value={{ signedIn, setSignedIn }}>
@@ -54,7 +75,7 @@ export default function App() {
             {/* Tabs for signed-in users */}
             <Stack.Screen
               name="MainTabs"
-              component={MainTabs}
+              component={role === 'leader' ? LeaderTabs : MainTabs}
               options={{ headerShown: false }}
             />
             {/* Glossary is outside the tabs */}
@@ -68,6 +89,7 @@ export default function App() {
             name="CommunityDetailTabs"
             component={CommunityDetailTabs}
             options={{ title: "", gestureEnabled: true }}
+            initialParams={{role}}
             />
 
           </Stack.Navigator>
@@ -113,13 +135,23 @@ const MainTabs = () => (
 
 const CommunityDetailTabs = () => {
   const route = useRoute();
-  const { id } = route.params;
+  const { role, id } = route.params;
 
   return (
     <Tab.Navigator>
       <Tab.Screen name="Details" component={CommunityDetail} initialParams={{ id }} />
-      <Tab.Screen name="Posts" component={Posts} initialParams={{ id }} />
+      <Tab.Screen name="Posts" component={role === 'leader' ? LeaderPosts : Posts} initialParams={{ id }} />
       <Tab.Screen name="Chat" component={Chat} initialParams={{ id }} />
     </Tab.Navigator>
   );
 };
+
+const LeaderTabs = () => {
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Commsadasunities" component={LeaderView} />
+      <Tab.Screen name="Joidasdned Communities" component={LeaderJoined} />
+      <Tab.Screen name="Profasdaile" component={Profile} />
+    </Tab.Navigator>
+  );
+}
