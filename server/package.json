@@ -13,6 +13,6 @@
     "express": "^4.21.2",
     "firebase-admin": "^13.2.0",
     "node-cron": "^3.0.3",
-    "stockapicaller": "file:../shared/StockApiCaller"
+     "@09jayy/stockapicaller": "^2.1.0"
   }
 }
