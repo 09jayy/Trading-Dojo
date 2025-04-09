@@ -5,7 +5,7 @@ import { useEffect, useState, useRef } from 'react'
 import { collection, getDocs, query, orderBy, addDoc, serverTimestamp } from 'firebase/firestore'
 import AsyncStorage from '@react-native-async-storage/async-storage'
 import { doc, getDoc } from 'firebase/firestore'
-import { get } from 'react-native/Libraries/TurboModule/TurboModuleRegistry'
+import { KeyboardAvoidingView, Platform, Keyboard, TouchableWithoutFeedback } from 'react-native'
 
 export const Chat = ({ route }) => {
     const { id } = route.params
@@ -94,35 +94,38 @@ export const Chat = ({ route }) => {
         }
     }
 
-    useEffect(() => {
-        if (flatListRef.current && messages.length > 0) {
-            flatListRef.current.scrollToEnd({})
-        }
-    }, [messages.length])
-
     return (
-        <View style={styles.chatContainer}>
-            <FlatList
-                ref={flatListRef}
-                data={messages}
-                keyExtractor={item => item.id}
-                renderItem={({ item }) => <ChatMessage message={item} />}
-                style={styles.messsageContainer}
-            />
+        <KeyboardAvoidingView
+            style={styles.chatContainer}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            keyboardVerticalOffset={160}
+        >
+            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <View style={{ flex: 1 }}>
+                    <FlatList
+                        ref={flatListRef}
+                        data={messages}
+                        keyExtractor={item => item.id}
+                        renderItem={({ item }) => <ChatMessage message={item} />}
+                        style={styles.messsageContainer}
+                        onContentSizeChange={() => flatListRef.current.scrollToEnd({ animated: true })}
+                    />
 
-            <View style={styles.formContainer}>
-                <TextInput
-                    style={styles.input}
-                    placeholder="Type a message..."
-                    placeholderTextColor="#ddd"
-                    value={input}
-                    onChangeText={setInput}
-                />
+                    <View style={styles.inputContainer}>
+                        <TextInput
+                            style={styles.msgInput}
+                            placeholder="Type a message..."
+                            placeholderTextColor="#ddd"
+                            value={input}
+                            onChangeText={setInput}
+                        />
 
-                <TouchableOpacity style={styles.button} onPress={() => sendMessage()}>
-                    <Text style={styles.buttonText}>Send</Text>
-                </TouchableOpacity>
-            </View>
-        </View>
+                        <TouchableOpacity style={styles.msgButton} onPress={sendMessage}>
+                            <Text style={styles.buttonText}>Send</Text>
+                        </TouchableOpacity>
+                    </View>
+                </View>
+            </TouchableWithoutFeedback>
+        </KeyboardAvoidingView>
     )
 }
