@@ -103,7 +103,7 @@ export const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingHorizontal: "5%",
-        marginBottom: "2%",
+        marginBottom: "8%",
     },
     msgInput: {
         flex: 1,
