@@ -51,7 +51,7 @@ export const Chat = ({ route }) => {
     function ChatMessage(props) {
         const { text, uid, name } = props.message
         
-        const isCurrentUser = uid === currentUid// implement later currently only for chattest@gmail.com pass is password
+        const isCurrentUser = uid === currentUid
 
         print(isCurrentUser === true ? "styles.sent" : "styles.received")
 
@@ -99,10 +99,6 @@ export const Chat = ({ route }) => {
             flatListRef.current.scrollToEnd({})
         }
     }, [messages.length])
-
-    const test = () => {
-        console.log(currentUid)
-    }
 
     return (
         <View style={styles.chatContainer}>
