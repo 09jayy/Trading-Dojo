@@ -3,11 +3,15 @@ import { SafeAreaView, FlatList, StyleSheet } from 'react-native';
 import StockItem from './StockItem';
 import Constants from 'expo-constants';
 import { useNavigation } from '@react-navigation/native';
+import StockApiCaller from 'stockapicaller';
 
 const extra = Constants.expoConfig?.extra ?? {};
 const { alpacaApiKey, alpacaSecretKey } = extra;
 
-const StockApiCaller = require('stockapicaller');
+const alpacaApiCaller = new StockApiCaller()
+.setApiService('alpaca')
+.setApiKey(alpacaApiKey)
+.setSecretKey(alpacaSecretKey);
 
 const stockList = ['AAPL', 'TSLA', 'NVDA', 'MSFT', 'AMZN', 'GOOGL', 'META', 'PLTR','AMD', 'JPM', 'IBM']
 const getTrendingStocks = async () => {
@@ -24,11 +28,6 @@ const getTrendingStocks = async () => {
 
 
 const getPrice = async (symbol) => {
-  const alpacaApiCaller = new StockApiCaller()
-    .setApiService('alpaca')
-    .setApiKey(alpacaApiKey)
-    .setSecretKey(alpacaSecretKey);
-
   try {
     const result = await alpacaApiCaller.fetchLatestTradeOf(symbol);
     
@@ -39,11 +38,6 @@ const getPrice = async (symbol) => {
   }
 };
 const getChange = async (symbol) => {
-  const alpacaApiCaller = new StockApiCaller()
-    .setApiService('alpaca')
-    .setApiKey(alpacaApiKey)
-    .setSecretKey(alpacaSecretKey);
-
   try {
     const result = await alpacaApiCaller.fetchPreviousBarData([symbol]);
     const stockBars = result?.bars?.[symbol];
@@ -63,8 +57,6 @@ const getChange = async (symbol) => {
   }
 };
 const getYesterdaysClose = async (symbol) => {
-  const StockApiCaller = require('stockapicaller');
-
   const alpacaApiCaller = new StockApiCaller()
     .setApiService('alpaca')
     .setApiKey(alpacaApiKey)
@@ -102,11 +94,6 @@ getYesterdaysClose('TSLA');
 
 
 const getStats = async (symbol) => {
-  const alpacaApiCaller = new StockApiCaller()
-    .setApiService('alpaca')
-    .setApiKey(alpacaApiKey)
-    .setSecretKey(alpacaSecretKey);
-
   try {
     const result = await alpacaApiCaller.fetchStatsOf(symbol);
     console.log('hi', result)
