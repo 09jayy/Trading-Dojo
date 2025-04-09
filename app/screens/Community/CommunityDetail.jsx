@@ -1,8 +1,9 @@
-// screens/CommunityDetail.js
+
 import React, { use, useEffect, useState } from 'react'
 import { View, Text} from 'react-native'
 import { db } from '../../components/Config/firebaseConfig'
 import { doc, getDoc } from 'firebase/firestore'
+import { styles } from './CommunityStyle/DetailsStyle'
 
 export const CommunityDetail = ({ route }) => {
   const { id } = route.params
@@ -25,15 +26,17 @@ useEffect(() => {
   }, [id]) // Re-run when id changes
     
   return (
-    <View>
-        {community ? (
-            <View>
-            <Text>Community Name: {community.name}</Text>
-            <Text>Members: {community.members.length}</Text>
-            </View>
-        ) : (
-            <Text>Loading...</Text>
-        )}
+    <View style={styles.container}>
+      {community ? (
+        <View>
+          <Text style={styles.header}>Community Name: {community.name}</Text>
+          <View style={styles.postContainer}>
+            <Text style={styles.postTitle}>Members: {community.members.length}</Text>
+          </View>
+        </View>
+      ) : (
+        <Text>Loading...</Text>
+      )}
     </View>
   )
 }
