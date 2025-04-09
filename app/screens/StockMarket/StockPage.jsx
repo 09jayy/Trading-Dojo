@@ -48,7 +48,7 @@ export const StockPage = ({ route }) => {
           text: 'Confirm',
           onPress: async () => {
             try {
-              const response = await fetch('http://localhost:3000/order', {
+              const response = await fetch('https://trading-dojo.onrender.com/order', {
                 method: 'POST',
                 headers: {
                   'Content-Type': 'application/json',
