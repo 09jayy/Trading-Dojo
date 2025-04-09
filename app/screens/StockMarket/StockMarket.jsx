@@ -23,13 +23,6 @@ const getTrendingStocks = async () => {
 };
 
 
-const logStockSymbols = async () => {
-  const symbols = await getTrendingStocks();
-  console.log("STOCK SYMBOLS --- ", symbols);
-  
-};
-logStockSymbols();
-
 const getPrice = async (symbol) => {
   const alpacaApiCaller = new StockApiCaller()
     .setApiService('alpaca')
