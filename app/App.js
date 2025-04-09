@@ -15,10 +15,12 @@ import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
 import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import { Posts } from './screens/Community/CommunityPages/Posts';
 import { Chat } from './screens/Community/CommunityPages/Chat';
 import { useRoute } from '@react-navigation/native';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
+
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
@@ -77,6 +79,7 @@ export default function App() {
             <Stack.Screen name="AuthTabs" component={AuthTabs} />
           </Stack.Navigator>
         )}
+        <Toast/>
       </NavigationContainer>
     </signedInContext.Provider>
   );
