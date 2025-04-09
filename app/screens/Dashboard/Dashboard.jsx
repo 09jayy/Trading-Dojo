@@ -85,7 +85,7 @@ export const Dashboard = () => {
             timeframeSelect, 
             { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
           );
-          
+
           newShareWorth[symbol] = getShareWorthOvertime(
             owned.ownedShares[symbol], 
             priceChange
@@ -148,9 +148,36 @@ export const Dashboard = () => {
               Portfolio Performance Graph
             </Text>
 
-            <View style={styles.timeframeControls}>
-              <TouchableOpacity onPress={() => {setTimeFrameSelect('1Day'); }}><Text>1Day</Text></TouchableOpacity>
-              <TouchableOpacity onPress={()=> {setTimeFrameSelect('1Hour'); }}><Text>1Hour</Text></TouchableOpacity>
+            <View style={styles.timeframeContainer}>
+              <TouchableOpacity 
+                style={[
+                  styles.timeframeButton,
+                  timeframeSelect === '1Day' && styles.activeButton
+                ]}
+                onPress={() => setTimeFrameSelect('1Day')}
+              >
+                <Text style={[
+                  styles.timeframeText,
+                  timeframeSelect === '1Day' && styles.activeText
+                ]}>
+                  1 Day
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[
+                  styles.timeframeButton,
+                  timeframeSelect === '1Hour' && styles.activeButton
+                ]}
+                onPress={() => setTimeFrameSelect('1Hour')}
+              >
+                <Text style={[
+                  styles.timeframeText,
+                  timeframeSelect === '1Hour' && styles.activeText
+                ]}>
+                  1 Hour
+                </Text>
+              </TouchableOpacity>
             </View>
 
             {Object.entries(sharesWorthOvertime).map(([symbol, data]) => (
