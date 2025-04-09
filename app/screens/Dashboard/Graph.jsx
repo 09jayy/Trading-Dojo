@@ -21,7 +21,7 @@ export const Graph = ({labels,data}) => {
                 width={Dimensions.get("window").width - 50} // from react-native
                 height={220}
                 yAxisLabel="$"
-                formatXLabel={(value)=>{return ''}}
+                formatXLabel={(value) => {return ''}}
                 yAxisInterval={1} // optional, defaults to 1
                 chartConfig={{
                 backgroundColor: "#e26a00",

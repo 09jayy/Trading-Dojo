@@ -36,6 +36,7 @@ export const Dashboard = () => {
     const [ownedShares, setOwnedShares] = useState({}); 
     const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
     const [refreshing, setRefreshing] = useState(false); 
+    const [timeframeSelect, setTimeFrameSelect] = useState('1Hour')
 
     useEffect(() => {
         const fetchOrInitBalance = async () => {
@@ -78,12 +79,13 @@ export const Dashboard = () => {
         // 3. Process each stock to generate graph data
         const newShareWorth = {};
         for (const symbol in owned.ownedShares) {
-          const priceChange = await getPriceChangesWithTime(
+          let priceChange = await getPriceChangesWithTime(
             stockApiCaller, 
             symbol,
-            '1Hour', 
-            { start: owned.ownedShares[symbol][0].created.split('.')[0] }
+            timeframeSelect, 
+            { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
           );
+
           newShareWorth[symbol] = getShareWorthOvertime(
             owned.ownedShares[symbol], 
             priceChange
@@ -99,7 +101,7 @@ export const Dashboard = () => {
 
     useEffect(() => {
       fetchData();
-    }, []);
+    }, [timeframeSelect]);
 
   useEffect(() => {
       console.log("Owned Shares:", ownedShares);
@@ -124,7 +126,7 @@ export const Dashboard = () => {
     
           <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.balanceContainer}>
-              <Text>Balance: £{balance.toFixed(2)}</Text>
+              <Text>Balance: ${balance.toFixed(2)}</Text>
               <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text>+ Add Funds</Text>
               </TouchableOpacity>
@@ -143,8 +145,40 @@ export const Dashboard = () => {
             ))}
     
             <Text style={styles.graphNotice}>
-              overall portfolio performance graph (scroll down to view more)
+              Portfolio Performance Graph
             </Text>
+
+            <View style={styles.timeframeContainer}>
+              <TouchableOpacity 
+                style={[
+                  styles.timeframeButton,
+                  timeframeSelect === '1Day' && styles.activeButton
+                ]}
+                onPress={() => setTimeFrameSelect('1Day')}
+              >
+                <Text style={[
+                  styles.timeframeText,
+                  timeframeSelect === '1Day' && styles.activeText
+                ]}>
+                  1 Day
+                </Text>
+              </TouchableOpacity>
+              
+              <TouchableOpacity 
+                style={[
+                  styles.timeframeButton,
+                  timeframeSelect === '1Hour' && styles.activeButton
+                ]}
+                onPress={() => setTimeFrameSelect('1Hour')}
+              >
+                <Text style={[
+                  styles.timeframeText,
+                  timeframeSelect === '1Hour' && styles.activeText
+                ]}>
+                  1 Hour
+                </Text>
+              </TouchableOpacity>
+            </View>
 
             {Object.entries(sharesWorthOvertime).map(([symbol, data]) => (
               <View key={symbol}>
@@ -192,7 +226,7 @@ export const Dashboard = () => {
                   Toast.show({
                     type: 'success',
                     text1: '✅ Funds Added!',
-                    text2: `£${amount.toFixed(2)} successfully added to your balance.`,
+                    text2: `$${amount.toFixed(2)} successfully added to your balance.`,
                     position: 'bottom',
                   });
                 }, 500);
