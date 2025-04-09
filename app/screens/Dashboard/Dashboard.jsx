@@ -79,12 +79,13 @@ export const Dashboard = () => {
         // 3. Process each stock to generate graph data
         const newShareWorth = {};
         for (const symbol in owned.ownedShares) {
-          const priceChange = await getPriceChangesWithTime(
+          let priceChange = await getPriceChangesWithTime(
             stockApiCaller, 
             symbol,
             timeframeSelect, 
             { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
           );
+          
           newShareWorth[symbol] = getShareWorthOvertime(
             owned.ownedShares[symbol], 
             priceChange

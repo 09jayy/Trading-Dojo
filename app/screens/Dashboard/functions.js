@@ -37,6 +37,7 @@ export const getPriceChangesWithTime = async (stockapicaller,symbol, timeframe, 
     console.log('function called')
     const bars = await stockapicaller.fetchBarDataTimeFrame(symbol, timeframe, {start: (start) ? start : null, end: (end) ? end : null}); 
     console.log(bars);
+    if (bars.bars == null) return []; 
     const percentageChange = []
     for (let i = 1; i < bars.bars.length; i++) {
         const change = (bars.bars[i].c - bars.bars[i-1].c) / bars.bars[i-1].c; 
