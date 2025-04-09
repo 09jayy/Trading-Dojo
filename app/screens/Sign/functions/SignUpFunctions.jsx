@@ -31,10 +31,13 @@ const handleSignUp = async (role, email, password, setter) => {
         const user = userCred.user;
         const userRef = doc(db, "users", user.uid);
         await setDoc(userRef, {
-            name: "",
+            name: `user${user.uid.substring(0,5)}`,
+            email: email,
             role: role,
             communities: [],
-            createdAt: serverTimestamp()
+            createdAt: serverTimestamp(),
+            balance: 10000,
+            ownedShares: {}
         });
 
         signIn(email, password, setter);

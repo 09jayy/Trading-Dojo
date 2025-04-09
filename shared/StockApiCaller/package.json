@@ -1,6 +1,6 @@
 {
     "type": "commonjs",
-    "name": "stockapicaller",
+    "name": "@09jayy/stockapicaller",
     "version": "2.1.0",
     "main": "StockApiCaller.js",
     "scripts": {
