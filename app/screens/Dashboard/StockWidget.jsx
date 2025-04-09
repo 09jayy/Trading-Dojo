@@ -48,7 +48,7 @@ export const StockWidget = ({stockSymbol,shareOrders}) => {
     const totalSpent = shareOrders.reduce((total, order) => {
         return order.tradeType === 'buy' 
             ? total + (order.sharePrice * order.shareQuantity)
-            : total - (order.sharePRice * order.shareQuantity);
+            : total - (order.sharePrice * order.shareQuantity);
     }, 0);
 
     return (
