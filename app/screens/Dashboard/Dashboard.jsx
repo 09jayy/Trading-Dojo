@@ -9,6 +9,7 @@ import StockApiCaller from 'stockapicaller';
 import Constants from 'expo-constants'; 
 import { getPriceChangesWithTime, getShareWorthOvertime, fetchUserId, fetchOwnedShares, fetchShareWorthOvertime } from './functions';
 import {Graph} from './Graph';
+import { StockWidget } from './StockWidget';
 
 const extra = Constants.expoConfig?.extra ?? {}; 
 
@@ -34,7 +35,10 @@ export const Dashboard = () => {
         
         // 2. Fetch owned shares
         const owned = await fetchOwnedShares(uid);
-        setOwnedShares(owned.ownedShares || {});
+        
+        const sharesCopy = JSON.parse(JSON.stringify(owned.ownedShares));
+        
+        setOwnedShares(sharesCopy); // previous bug of ownedShares being reset to empty, this prevents
         
         // 3. Process each stock to generate graph data
         const newShareWorth = {};
@@ -95,21 +99,12 @@ export const Dashboard = () => {
               <Text>Amount Invested</Text>
             </View>
     
-            {Array.from({ length: 4 }).map((_, i) => (
-              <View key={i} style={styles.stockCard}>
-                <Text style={styles.symbol}>Stock Symbol</Text>
-                <View style={styles.stockInfo}>
-                  <Text>Bought at -</Text>
-                  <View style={styles.priceRow}>
-                    <Text>Current Price - </Text>
-                    <Entypo
-                      name={i < 2 ? "arrow-bold-up" : "arrow-bold-down"}
-                      size={18}
-                      color={i < 2 ? "green" : "red"}
-                    />
-                  </View>
-                </View>
-              </View>       
+            {Object.entries(ownedShares).map(([stockSymbol, sharesArray], index) => (
+              <StockWidget
+                key={stockSymbol}
+                stockSymbol={stockSymbol}
+                shareOrders={sharesArray}
+              />
             ))}
     
             <Text style={styles.graphNotice}>
