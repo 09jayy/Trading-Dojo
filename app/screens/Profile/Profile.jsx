@@ -76,6 +76,7 @@ export const Profile = () => {
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter new username..."
+                            placeholderTextColor="#888"
                             value={username}
                             onChangeText={setUsername}
                         />
@@ -98,18 +99,21 @@ export const Profile = () => {
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter new Email..."
+                            placeholderTextColor="#888"
                             value={email}
                             onChangeText={setEmail}
                         />
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter old Email..."
+                            placeholderTextColor="#888"
                             value={oldEmail}
                             onChangeText={setOldEmail}
                         />
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter Password..."
+                            placeholderTextColor="#888"
                             value={password}
                             onChangeText={setPassword}
                         />
@@ -133,18 +137,21 @@ export const Profile = () => {
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter Email..."
+                            placeholderTextColor="#888"
                             value={email}
                             onChangeText={setEmail}
                         />
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter old Password..."
+                            placeholderTextColor="#888"
                             value={oldPassword}
                             onChangeText={setOldPassword}
                         />
                         <TextInput
                             style={styles.inputModal}
                             placeholder="Enter New Password..."
+                            placeholderTextColor="#888"
                             value={password}
                             onChangeText={setPassword}
                         />
