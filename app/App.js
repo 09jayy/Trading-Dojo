@@ -13,8 +13,10 @@ import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
+import { StockPage } from './screens/StockMarket/StockPage';
 import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 import { Posts } from './screens/Community/CommunityPages/Posts';
 import { Chat } from './screens/Community/CommunityPages/Chat';
 import { useRoute } from '@react-navigation/native';
@@ -23,6 +25,7 @@ import { db } from './components/Config/firebaseConfig';
 import { LeaderView } from './screens/Community/LeaderCommunity'; 
 import { LeaderJoined } from './screens/Community/LeaderJoined';
 import { LeaderPosts } from './screens/Community/CommunityPages/LeaderPosts';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
 const Tab = createBottomTabNavigator();
@@ -84,14 +87,17 @@ export default function App() {
               component={Glossary}
               options={{ title: 'Glossary', fullScreenGestureEnabled: true }}
             />
-
+            {/* Stock Page is outside the tabs */}
+             <Stack.Screen 
+             name="StockPage" 
+             component={StockPage} 
+             options={{ title: 'Stock Page' }}/>
             <Stack.Screen
             name="CommunityDetailTabs"
             component={CommunityDetailTabs}
             options={{ title: "", gestureEnabled: true }}
             initialParams={{role}}
             />
-
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -99,6 +105,7 @@ export default function App() {
             <Stack.Screen name="AuthTabs" component={AuthTabs} />
           </Stack.Navigator>
         )}
+        <Toast/>
       </NavigationContainer>
     </signedInContext.Provider>
   );
@@ -124,7 +131,35 @@ const AuthTabs = () => (
 
 // Signed-in tab navigator (Dashboard, Profile, etc.)
 const MainTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({route}) => ({
+      headerShown: true,
+      tabBarIcon: ({color, size}) => {
+        let iconName; 
+        switch (route.name) {
+          case 'Investments':
+            iconName = 'attach-money';
+            break;
+          case 'Stock Market':
+            iconName = 'shopping-basket';
+            break; 
+          case 'Communities':
+            iconName='people';
+            break; 
+          case 'Joined Communities':
+            iconName = 'house';
+            break; 
+          case 'Profile': 
+            iconName = 'person';
+            break; 
+          default:
+            iconName = 'check-box-outline-blank'
+            break; 
+        }
+        return <MaterialIcons name={iconName} size={size} color={color} />
+      }
+    })}
+  >
     <Tab.Screen name="Investments" component={Dashboard} />
     <Tab.Screen name="Stock Market" component={StockMarket} />
     <Tab.Screen name="Communities" component={CommunityView} />

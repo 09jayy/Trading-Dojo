@@ -1,15 +1,14 @@
 const express = require('express')
 const cron = require('node-cron'); 
 const { initializeApp, applicationDefault, cert } = require('firebase-admin/app');
-const serviceAccount = require('./serviceAccountKey.json'); 
 const { getFirestore, Timestamp, FieldValue, Filter } = require('firebase-admin/firestore');
-const StockApiCaller = require('stockapicaller'); 
+const StockApiCaller = require('@09jayy/stockapicaller'); 
 const MarketOrder = require('./MarketOrder'); 
 require('dotenv').config(); 
 
 // initialise express app server
 const app = express()
-const port = 3000
+const port = process.env.PORT || 3000; 
 app.use(express.json()); 
 
 const alpacaApiCaller = new StockApiCaller()
@@ -24,7 +23,7 @@ if (!limitOrderProcessing) { console.log('order processing is disabled to reduce
 
 // initialise firebase admin app with service account key
 initializeApp({
-    credential: cert(serviceAccount)
+    credential: cert(JSON.parse(process.env.SERVICE_ACCOUNT))
 });
 const db = getFirestore();
 
@@ -70,6 +69,7 @@ app.post('/order', async (req, res) => {
                 console.error(error); 
             }
         }
+        res.status(201).json({success: true, message: 'order added'}); 
     } catch (error) {
         console.error("Error saving order:", error);
         res.status(500).json({ error: "Internal Server Error" });
