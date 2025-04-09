@@ -82,7 +82,7 @@ export const Dashboard = () => {
             stockApiCaller, 
             symbol,
             '1Hour', 
-            { start: owned.ownedShares[symbol][0].time }
+            { start: owned.ownedShares[symbol][0].created.split('.')[0] }
           );
           newShareWorth[symbol] = getShareWorthOvertime(
             owned.ownedShares[symbol], 
