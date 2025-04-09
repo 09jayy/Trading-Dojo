@@ -120,7 +120,7 @@ export const LeaderPosts = ({ route }) => {
                                 onChangeText={setNewContent}
                             />
                             <Button title="Create Post" onPress={handleCreatePost}/>
-                        </View>
+                    </View>
                 )}
         </View>
     </SafeAreaView>
