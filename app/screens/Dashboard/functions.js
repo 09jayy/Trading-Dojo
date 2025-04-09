@@ -61,45 +61,88 @@ export const getPriceChangesWithTime = async (stockapicaller,symbol, timeframe, 
  * 
  * @returns {Array<{shareWorth: number, time: string}>} - owned shares worth overtime 
  */
-export const getShareWorthOvertime = (shareOrder,percentageChange) => {
+export const getShareWorthOvertime = (shareOrder, percentageChange) => {
     let times = [];
     let shareWorths = [];
     let ownedShares = 0;
-    let lastPrice = null;
-
-    // Sort orders by time to ensure chronological calculations
+    let currentPrice = 0; // Track the current market price
+    
+    // Sort all inputs by time
     shareOrder.sort((a, b) => new Date(a.time) - new Date(b.time));
+    percentageChange.sort((a, b) => new Date(a.time) - new Date(b.time));
 
-    for (let i = 0; i < percentageChange.length; i++) {
-        let { time, change } = percentageChange[i]; // Change is a decimal (e.g., 0.05 for 5%)
+    // Initialize with first order
+    if (shareOrder.length > 0) {
+        const firstOrder = shareOrder[0];
+        currentPrice = firstOrder.sharePrice;
+        if (firstOrder.tradeType === 'buy') {
+            ownedShares = firstOrder.shareQuantity;
+        }
+        times.push(firstOrder.time);
+        shareWorths.push(firstOrder.sharePrice * firstOrder.shareQuantity);
+    }
 
-        // Process all orders up to the current time
-        while (shareOrder.length > 0 && new Date(shareOrder[0].time) <= new Date(time)) {
-            let order = shareOrder.shift();
+    let orderIndex = 1; // Start from the second order
+    let changeIndex = 0;
+
+    // Process all percentage changes
+    while (changeIndex < percentageChange.length) {
+        const { time: changeTime, change } = percentageChange[changeIndex];
+        
+        // Process all orders that occur before this percentage change
+        while (orderIndex < shareOrder.length && 
+                new Date(shareOrder[orderIndex].time) <= new Date(changeTime)) {
+            const order = shareOrder[orderIndex];
+            
+            // First apply any price changes from previous percentage changes
+            if (changeIndex > 0) {
+                const lastChange = percentageChange[changeIndex - 1].change;
+                currentPrice *= (1 + lastChange);
+            }
+            
+            // Then process the order
             if (order.tradeType === 'buy') {
                 ownedShares += order.shareQuantity;
-                lastPrice = order.sharePrice; // Update last known price from buy
+                currentPrice = order.sharePrice; // Update to most recent buy price
             } else if (order.tradeType === 'sell') {
-                ownedShares -= order.shareQuantity;
-                ownedShares = Math.max(ownedShares, 0); // Prevent negative shares
+                ownedShares = Math.max(ownedShares - order.shareQuantity, 0);
             }
+            
+            times.push(order.time);
+            shareWorths.push(ownedShares * currentPrice);
+            orderIndex++;
         }
-
-        // Apply percentage change to last known price
-        if (i > 0) {
-            lastPrice *= (1 + change); // Since change is already a decimal
+        
+        // Apply the current percentage change
+        currentPrice *= (1 + change);
+        
+        // Add the point after percentage change
+        times.push(changeTime);
+        shareWorths.push(ownedShares * currentPrice);
+        
+        changeIndex++;
+    }
+    
+    // Process any remaining orders after the last percentage change
+    while (orderIndex < shareOrder.length) {
+        const order = shareOrder[orderIndex];
+        
+        // Apply the last percentage change
+        if (percentageChange.length > 0) {
+            const lastChange = percentageChange[percentageChange.length - 1].change;
+            currentPrice *= (1 + lastChange);
         }
-
-        // Calculate total worth
-        let shareWorth = ownedShares * lastPrice;
-
-        // Ensure no NaN or Infinity values
-        shareWorth = isFinite(shareWorth) ? shareWorth : 0;
-
-
-        // Store values for graph plotting
-        times.push(time);
-        shareWorths.push(shareWorth);
+        
+        if (order.tradeType === 'buy') {
+            ownedShares += order.shareQuantity;
+            currentPrice = order.sharePrice;
+        } else if (order.tradeType === 'sell') {
+            ownedShares = Math.max(ownedShares - order.shareQuantity, 0);
+        }
+        
+        times.push(order.time);
+        shareWorths.push(ownedShares * currentPrice);
+        orderIndex++;
     }
 
     return { times, shareWorths };

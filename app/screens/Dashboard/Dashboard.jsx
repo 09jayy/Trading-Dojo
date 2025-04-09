@@ -82,7 +82,7 @@ export const Dashboard = () => {
             stockApiCaller, 
             symbol,
             '1Hour', 
-            { start: owned.ownedShares[symbol][0].created.split('.')[0] }
+            { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
           );
           newShareWorth[symbol] = getShareWorthOvertime(
             owned.ownedShares[symbol], 
@@ -124,7 +124,7 @@ export const Dashboard = () => {
     
           <ScrollView contentContainerStyle={styles.scrollContainer}>
             <View style={styles.balanceContainer}>
-              <Text>Balance: £{balance.toFixed(2)}</Text>
+              <Text>Balance: ${balance.toFixed(2)}</Text>
               <TouchableOpacity style={styles.addButton} onPress={() => setModalVisible(true)}>
                 <Text>+ Add Funds</Text>
               </TouchableOpacity>
@@ -192,7 +192,7 @@ export const Dashboard = () => {
                   Toast.show({
                     type: 'success',
                     text1: '✅ Funds Added!',
-                    text2: `£${amount.toFixed(2)} successfully added to your balance.`,
+                    text2: `$${amount.toFixed(2)} successfully added to your balance.`,
                     position: 'bottom',
                   });
                 }, 500);
