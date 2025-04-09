@@ -71,6 +71,31 @@ class StockApiCaller {
         return await this.apiService.fetchLatestQuoteOf(symbol, this.apiKey, this.secretKey);
     }
 
+    async fetchPreviousBarData(symbols) {
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+        
+        return await this.apiService.fetchPreviousBarData(symbols, this.apiKey, this.secretKey); 
+    }
+
+
+    async fetchBarDataTimeFrame(symbol, timeframe, {start = null, end = null, limit=null} = {}) {
+        if (!this.apiService) {
+            throw new Error('api service is not set');
+        }
+
+        if (!this.apiKey || !this.secretKey) {
+            throw new Error('api key or secret key is null');
+        }
+
+        return await this.apiService.fetchBarDataTimeFrame(symbol, timeframe, this.apiKey, this.secretKey, {start,end,limit}); 
+    }
+
     /**
      * 
      * @param {string} symbol - stock symbol 

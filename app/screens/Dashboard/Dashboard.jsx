@@ -10,7 +10,20 @@ import { doc, getDoc, updateDoc, setDoc } from 'firebase/firestore';
 import { db } from '../../components/Config/firebaseConfig';
 import { getAuth } from 'firebase/auth';
 import Toast from 'react-native-toast-message';
+import StockApiCaller from 'stockapicaller'; 
+import Constants from 'expo-constants'; 
+import { getPriceChangesWithTime, getShareWorthOvertime, fetchUserId, fetchOwnedShares, fetchShareWorthOvertime } from './functions';
+import {Graph} from './Graph';
+import { StockWidget } from './StockWidget';
 
+const extra = Constants.expoConfig?.extra ?? {}; 
+
+const {alpacaApiKey, alpacaSecretKey} = extra; 
+
+const stockApiCaller = new StockApiCaller()
+  .setApiService('alpaca')
+  .setApiKey(alpacaApiKey)
+  .setSecretKey(alpacaSecretKey); 
 
 export const Dashboard = () => {
     const navigation = useNavigation();
@@ -20,7 +33,9 @@ export const Dashboard = () => {
     const [balance, setBalance] = useState(0);
     const auth = getAuth();
     const userId = auth.currentUser?.uid;
-    
+    const [ownedShares, setOwnedShares] = useState({}); 
+    const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
+    const [refreshing, setRefreshing] = useState(false); 
 
     useEffect(() => {
         const fetchOrInitBalance = async () => {
@@ -46,6 +61,50 @@ export const Dashboard = () => {
 
         fetchOrInitBalance();
     }, [userId]);
+
+    const fetchData = async () => {
+      setRefreshing(true);
+      try {
+        // 1. Fetch user ID
+        const uid = await fetchUserId();
+        
+        // 2. Fetch owned shares
+        const owned = await fetchOwnedShares(uid);
+        
+        const sharesCopy = JSON.parse(JSON.stringify(owned.ownedShares));
+        
+        setOwnedShares(sharesCopy); // previous bug of ownedShares being reset to empty, this prevents
+        
+        // 3. Process each stock to generate graph data
+        const newShareWorth = {};
+        for (const symbol in owned.ownedShares) {
+          const priceChange = await getPriceChangesWithTime(
+            stockApiCaller, 
+            symbol,
+            '1Hour', 
+            { start: owned.ownedShares[symbol][0].time }
+          );
+          newShareWorth[symbol] = getShareWorthOvertime(
+            owned.ownedShares[symbol], 
+            priceChange
+          );
+        }
+        setSharesWorthOvertime(newShareWorth);
+      } catch (error) {
+        console.error('Refresh error:', error);
+      } finally {
+        setRefreshing(false);
+      }
+    };
+
+    useEffect(() => {
+      fetchData();
+    }, []);
+
+  useEffect(() => {
+      console.log("Owned Shares:", ownedShares);
+      console.log("Share Worth Over Time:", sharesWorthOvertime);
+  }, [ownedShares, sharesWorthOvertime]);
 
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -75,26 +134,36 @@ export const Dashboard = () => {
               <Text>Amount Invested</Text>
             </View>
     
-            {Array.from({ length: 4 }).map((_, i) => (
-              <View key={i} style={styles.stockCard}>
-                <Text style={styles.symbol}>Stock Symbol</Text>
-                <View style={styles.stockInfo}>
-                  <Text>Bought at -</Text>
-                  <View style={styles.priceRow}>
-                    <Text>Current Price - </Text>
-                    <Entypo
-                      name={i < 2 ? "arrow-bold-up" : "arrow-bold-down"}
-                      size={18}
-                      color={i < 2 ? "green" : "red"}
-                    />
-                  </View>
-                </View>
-              </View>
+            {Object.entries(ownedShares).map(([stockSymbol, sharesArray], index) => (
+              <StockWidget
+                key={stockSymbol}
+                stockSymbol={stockSymbol}
+                shareOrders={sharesArray}
+              />
             ))}
     
             <Text style={styles.graphNotice}>
               overall portfolio performance graph (scroll down to view more)
             </Text>
+
+            {Object.entries(sharesWorthOvertime).map(([symbol, data]) => (
+              <View key={symbol}>
+                <Text>{symbol}</Text>
+                <Graph 
+                  labels={data?.times || [1]} 
+                  data={data?.shareWorths || [1]}
+                />
+              </View>
+            ))}
+
+            {/* Add this at the bottom of your ScrollView */}
+            <TouchableOpacity 
+              onPress={fetchData}
+              disabled={refreshing}
+            >
+              <Text>{refreshing ? 'Refreshing...' : 'Refresh Data'}</Text>
+            </TouchableOpacity>
+
           </ScrollView>
           <AddFundsModal
             visible={modalVisible}

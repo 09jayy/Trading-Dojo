@@ -13,8 +13,13 @@ import { Profile } from './screens/Profile/Profile';
 import { StockMarket } from './screens/StockMarket/StockMarket';
 import { CommunityView } from './screens/Community/CommunityView';
 import { JoinedCommunities } from './screens/Community/JoinedCommunities';
+import {CommunityDetail} from './screens/Community/CommunityDetail';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import Toast from 'react-native-toast-message';
+import { Posts } from './screens/Community/CommunityPages/Posts';
+import { Chat } from './screens/Community/CommunityPages/Chat';
+import { useRoute } from '@react-navigation/native';
+import MaterialIcons from '@expo/vector-icons/MaterialIcons';
 
 
 const Tab = createBottomTabNavigator();
@@ -58,8 +63,15 @@ export default function App() {
             <Stack.Screen
               name="Glossary"
               component={Glossary}
-              options={{ title: 'Glossary' }}
+              options={{ title: 'Glossary', fullScreenGestureEnabled: true }}
             />
+
+            <Stack.Screen
+            name="CommunityDetailTabs"
+            component={CommunityDetailTabs}
+            options={{ title: "", gestureEnabled: true }}
+            />
+
           </Stack.Navigator>
         ) : (
           <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -93,7 +105,35 @@ const AuthTabs = () => (
 
 // Signed-in tab navigator (Dashboard, Profile, etc.)
 const MainTabs = () => (
-  <Tab.Navigator>
+  <Tab.Navigator
+    screenOptions={({route}) => ({
+      headerShown: true,
+      tabBarIcon: ({color, size}) => {
+        let iconName; 
+        switch (route.name) {
+          case 'Investments':
+            iconName = 'attach-money';
+            break;
+          case 'Stock Market':
+            iconName = 'shopping-basket';
+            break; 
+          case 'Communities':
+            iconName='people';
+            break; 
+          case 'Joined Communities':
+            iconName = 'house';
+            break; 
+          case 'Profile': 
+            iconName = 'person';
+            break; 
+          default:
+            iconName = 'check-box-outline-blank'
+            break; 
+        }
+        return <MaterialIcons name={iconName} size={size} color={color} />
+      }
+    })}
+  >
     <Tab.Screen name="Investments" component={Dashboard} />
     <Tab.Screen name="Stock Market" component={StockMarket} />
     <Tab.Screen name="Communities" component={CommunityView} />
@@ -101,3 +141,16 @@ const MainTabs = () => (
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
 );
+
+const CommunityDetailTabs = () => {
+  const route = useRoute();
+  const { id } = route.params;
+
+  return (
+    <Tab.Navigator>
+      <Tab.Screen name="Details" component={CommunityDetail} initialParams={{ id }} />
+      <Tab.Screen name="Posts" component={Posts} initialParams={{ id }} />
+      <Tab.Screen name="Chat" component={Chat} initialParams={{ id }} />
+    </Tab.Navigator>
+  );
+};
