@@ -7,7 +7,6 @@ import { Image } from 'react-native';
 
 export const StockSpecific = ({ route }) => {
   const { stock } = route.params;
-  console.log("HELLLOOOOOOOOOOOOOOOOOOO" + stock.image);
 
   return (
     <ScrollView contentContainerStyle={styles.container}>
