@@ -139,7 +139,7 @@ export const StockPage = ({ route }) => {
               );
               console.log(`Order success: ${numQty} shares of ${stock.symbol}`);
             } catch (error) {
-              console.error('Buy error:', error.message);
+              //console.error('Buy error:', error.message);
               Alert.alert('Error', error.message || 'Failed to place order');
             }
           },
@@ -192,7 +192,7 @@ const handleSellPress = () => {
             );
             console.log(`Sell order success: ${numQty} shares of ${stock.symbol}`);
           } catch (error) {
-            console.error('Sell error:', error.message);
+            //console.error('Sell error:', error.message);
             Alert.alert('Error', error.message || 'Failed to place sell order');
           }
         },
