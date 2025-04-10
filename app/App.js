@@ -69,7 +69,7 @@ export default function App() {
     }, [uid]);
   
   return (
-    <signedInContext.Provider value={{ signedIn, setSignedIn }}>
+    <signedInContext.Provider value={{ signedIn, setSignedIn, uid, setUid }}>
       <StatusBar barStyle="light-content" backgroundColor="black" translucent={true} />
 
       <NavigationContainer>

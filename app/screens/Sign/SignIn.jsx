@@ -11,7 +11,7 @@ export const SignIn = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const buttonLabel = "SIGN IN";
-    const { setSignedIn } = useContext(signedInContext);
+    const { setSignedIn, setUid } = useContext(signedInContext);
     const navigation = useNavigation();
 
     return (
@@ -36,7 +36,7 @@ export const SignIn = () => {
                     secureTextEntry={true}
                 />
 
-                <TouchableOpacity style={styles.button} onPress={() => signIn(email, password, setSignedIn)}>
+                <TouchableOpacity style={styles.button} onPress={async () => setUid(await signIn(email, password, setSignedIn))}>
                     <Text style={styles.buttonText}>{buttonLabel}</Text>
                 </TouchableOpacity>
 
