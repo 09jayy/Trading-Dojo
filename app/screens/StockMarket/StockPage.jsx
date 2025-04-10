@@ -131,8 +131,8 @@ export const StockPage = ({ route }) => {
               if (!response.ok) {
                 const errorData = await response.json();
                 throw new Error(errorData.message || 'Request failed');
-              }
-  
+              }  
+
               Alert.alert(
                 'Order Placed',
                 `You bought ${numQty} share(s) of ${stock.symbol}`

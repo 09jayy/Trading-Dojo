@@ -68,6 +68,8 @@ app.post('/order', async (req, res) => {
                 console.log('stock order completed');  
             } catch (error) {
                 console.error(error); 
+                res.status(400).json({message:`stock order failed: ${error.message}`}); 
+                return; 
             }
         }
         res.status(201).json({...req.body, sharePrice: sharePrice}); 

@@ -83,7 +83,7 @@ export const Dashboard = () => {
             stockApiCaller, 
             symbol,
             timeframeSelect, 
-            { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z' }
+            { start: owned.ownedShares[symbol][0].created.split('.')[0] + 'Z'}
           );
 
           newShareWorth[symbol] = getShareWorthOvertime(
