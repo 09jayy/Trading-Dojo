@@ -27,7 +27,7 @@ const stockApiCaller = new StockApiCaller()
 
 export const Dashboard = () => {
     const navigation = useNavigation();
-    const {setSignedIn} = useContext(signedInContext)
+    const {setSignedIn, uid} = useContext(signedInContext)
     const balanceLimit = 20000; 
     const [modalVisible, setModalVisible] = useState(false);
     const [balance, setBalance] = useState(0);
@@ -40,9 +40,7 @@ export const Dashboard = () => {
 
     useEffect(() => {
         const fetchOrInitBalance = async () => {
-          if (!userId) return;
-
-          const userRef = doc(db, 'users', userId);
+          const userRef = doc(db, 'users', uid);
           const snapshot = await getDoc(userRef);
           if(!snapshot.exists()) {
             await setDoc(userRef, { balance: 0});
@@ -59,9 +57,9 @@ export const Dashboard = () => {
             }
           }
         };
-
+        console.log('update BALANCE')
         fetchOrInitBalance();
-    }, [userId]);
+    }, [userId, ownedShares]);
 
     const fetchData = async () => {
       setRefreshing(true);
