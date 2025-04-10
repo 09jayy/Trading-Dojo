@@ -37,6 +37,7 @@ export const Dashboard = () => {
     const [sharesWorthOvertime, setSharesWorthOvertime] = useState({}); 
     const [refreshing, setRefreshing] = useState(false); 
     const [timeframeSelect, setTimeFrameSelect] = useState('1Hour')
+    const [amountInvested, setAmountInvested] = useState(0);
 
     useEffect(() => {
         const fetchOrInitBalance = async () => {
@@ -101,6 +102,14 @@ export const Dashboard = () => {
       fetchData();
     }, [timeframeSelect]);
 
+    useEffect(() => {
+      let total = Object.values(ownedShares).reduce((acc, shareArray) => {
+          return acc + shareArray.reduce((sum, order) => (order.tradeType === 'buy') ? sum + (order.sharePrice * order.shareQuantity) : sum -  (order.sharePrice * order.shareQuantity), 0);
+      }, 0);
+  
+      setAmountInvested(total);
+      }, [ownedShares]);
+
   useEffect(() => {
       console.log("Owned Shares:", ownedShares);
       console.log("Share Worth Over Time:", sharesWorthOvertime);
@@ -131,7 +140,7 @@ export const Dashboard = () => {
             </View>
     
             <View style={styles.investedBox}>
-              <Text>Amount Invested</Text>
+              <Text>Amount Invested: ${amountInvested.toFixed(2)}</Text>
             </View>
     
             {Object.entries(ownedShares).map(([stockSymbol, sharesArray], index) => (
