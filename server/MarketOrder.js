@@ -71,7 +71,8 @@ class MarketOrder extends IOrderStrategy {
                     shareQuantity: this.shareQuantity,
                     sharePrice: sharePrice,
                     tradeType: this.tradeType, 
-                    created: time
+                    created: time,
+                    id: Math.random().toString(36).substring(2, 10) + Date.now().toString(36) 
                 }
 
                 // 1. adds shares to account , record amount of money spent buying that amount of shares
