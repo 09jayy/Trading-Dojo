@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
       flexDirection: 'row', 
       justifyContent: 'space-around', 
       alignItems: 'center',
-      backgroundColor: '#f8f9fa',  // Light background
+      backgroundColor: '#f8f9fa',  
       paddingVertical: 10,
       borderBottomWidth: 2,
       borderBottomColor: '#ddd', 
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     },
     activeButton: {
       borderBottomWidth: 3,
-      borderBottomColor: '#007bff', // Active color (blue)
+      borderBottomColor: '#007bff', 
     },
     navText: {
       fontSize: 16, 
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
       fontWeight: 'bold',
     },
     activeText: {
-      color: '#007bff', // Active text color
+      color: '#007bff',
     },
   });
   
