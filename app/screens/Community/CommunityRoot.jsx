@@ -20,7 +20,7 @@ export const CommunityRoot = () => {
                     style={[styles.navButton, page === 'community' && styles.activeButton]} 
                     onPress={() => setPage('community')}
                 >
-                    <Text style={[styles.navText, page === 'community' && styles.activeText]}>Community</Text>
+                    <Text style={[styles.navText, page === 'community' && styles.activeText]}>Explore</Text>
                 </TouchableOpacity>
             </View>
             {
