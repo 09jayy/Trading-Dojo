@@ -1,58 +1,65 @@
-# Trading-Dojo
+         
+<img src='./app/assets/logo-colour1.png' style='filter: brightness(0.75)'>
 
-A Paper Trading application focused on learning the fundamentals of stocks and shares trading with a built in social messaging platform. Built with React Native + Expo, Powered by Firebase
+A Paper Trading application focused on learning the fundamentals of stocks and shares trading with a built in social messaging platform. Built with React Native + Expo, Powered by Firebase.
 
 # Tech Stack
 
-- Expo + React-Native
-- Firebase-JS-SDK
-- ExpressJs
+- **Expo + React Native** *(Front-End Mobile Application)*
+- **Firebase Auth & Firestore** *(User Authentication and Cloud Database Storage)*
+- **ExpressJS** *(Order Processing Server)*
 
-# Dev instructions
+# Developer Instructions
 
 ```bash
 git clone https://github.com/09jayy/Trading-Dojo
 cd Trading-Dojo
-```
+```    
 
 ## Running Expo Application
 
-### Install node modules
+### 1. Set up Environment Variables
 
-```bash
-cd app
-npm install
+`app/.env` environment variables. Fetched from [Firebase](https://firebase.google.com/) project, Alpaca Api keys from [Alpaca](https://alpaca.markets/) 
+
+```
+FIREBASE_KEY= 
+AUTH_DOMAIN=
+PROJECT_ID=
+STORAGE_BUCKET=
+MESSAGING_SENDER_ID=
+APP_ID=
+ALPACA_API_KEY=
+ALPACA_SECRET_KEY=
 ```
 
-### Start Application
+> Defined the variables above, followed by the corresponding key, leaving no spaces *(note: firebase environment variables auth domain is before project id in this list, make sure you paste the correct key on each line)*
+
+
+### 2. Install node modules + run
 
 ```bash
 cd app # if not already in /Trading-Dojo/app
-npm start
-# ... follow expo instructions
+npm install
+npx expo start
+# ... follow expo instruction
 ```
 
 ## Running Server Application
 
-### 1. Install dependencies of shared/StockApiCaller 
+If the deployment of the server is unavailable on [render.com](https://render.com/), you can run server locally. (May have to change fetch requests to localhost URL or device IP from render.com deployed url) 
 
-```bash
-cd shared
-cd StockApiCaller
-npm install
+### 1. Set up Environment Variables
+
+`server/.env` environment variables. Find firebase service account environment variables in *Firebase app > Project Settings > Service Accounts > Firebase Admin SDK > Generate new private key.* Paste .json data contained within quotes. E.g. `SERVICE_ACCOUNT='{"type": "service_account" ...}'` 
+
+```
+ALPACA_API_KEY=
+ALPACA_SECRET_KEY= 
+SERVICE_ACCOUNT='insert firebase service account admin SDK'
 ```
 
-### 2. Set up environment variables
-```bash
-ALPACA_API_KEY='insert alpaca api key'
-ALPACA_SECRET_KEY='insert alapaca secret key' 
-```
-
-### 3. Fetch the firebase firestore service account key for firebase/admin
-To retrieve a new private key: In the firebase, select project, then project overview gear icon->project settings->service accounts->generate new private key. This will download a .json file.
-Move this json file into folder '.../Trading-Dojo/server' and rename to 'serviceAccountKey.json'
-
-### 4. Start server using node
+### 2. Start server using node (Local)
 
 ```bash
 # in a new terminal different to the expo application
@@ -97,20 +104,40 @@ npx expo start
 npx expo start --tunnel
 ```
 
-### ENV Set up
-To avoid publishing information such as API keys we use .env files to protect this data
+### Unable to resolve/find `@09jayy/StockApiCaller` npm module in server
 
-In your app folder create a new file and name it '.env' this name should be the name in its entirety including the .file type portion
-You should see a cog wheel then the name .env in your app directory now
+If the npm package is no longer available on npm, this repo contains the npm package code in the `shared/StockApiCaller` directory. 
+- From within `server/package.json`, switch the version of the npm package to the shared/StockApiCaller directory.
 
-Next open this file up and write the following
+```diff
+"dependencies": {
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "firebase-admin": "^13.2.0",
+    "node-cron": "^3.0.3",
+-     "@09jayy/stockapicaller": "^2.1.0"
++     "@09jayy/stockapicaller": "file:../shared/stockapicaller/stockapicaller-2.1.0.tgz"
+  }
+```
+
+### Unable to resolve/find StockApiCaller in Expo Application
+
+The expo app uses the .tgz of the npm package. If this does not exist you can either switch it to the published npm package or use `npm pack` to create the .tgz file. 
+
+From within `app/package.json`, switch the version of the npm package to the .tgz file from in the shared/StockApiCaller directory.
 
 ```bash
-FIREBASE_KEY=
-AUTH_DOMAIN=
-PROJECT_ID=
-STORAGE_BUCKET=
-MESSAGING_SENDER_ID=
-APP_ID=
+cd shared/StockApiCaller
+npm pack
 ```
-> followed by the corresponding key, leaving no spaces (note auth domain is before project id in this list, make sure you paste the correct key on each line)
+
+*OR*
+
+Alternatively, from within `app/package.json`, set stockapicaller value to `@09jayy/StockApiCaller`
+
+```diff
+    "react-native-screens": "~4.4.0",
+-    "stockapicaller": "file:../shared/stockapicaller/stockapicaller-2.1.0.tgz"
++    "stockapicaller": "@09jayy/StockApiCaller"
+  },
+```
