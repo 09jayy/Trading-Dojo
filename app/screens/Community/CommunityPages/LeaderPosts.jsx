@@ -61,7 +61,7 @@ export const LeaderPosts = ({ route }) => {
         }
     
         fetchPosts()
-      }, [isFocused]) // Re-run when id changes
+      }, [isFocused]) 
 
 
     const handleCreatePost = async () => {

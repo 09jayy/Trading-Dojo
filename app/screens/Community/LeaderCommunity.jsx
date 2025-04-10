@@ -138,7 +138,9 @@ export const LeaderView = () => {
         console.log("Community created with ID: ", docRef.id);
 
         const postsRef = collection(db, "Communities", docRef.id, "Posts");
-        await addDoc(postsRef, {});
+        await addDoc(postsRef, {Content: "Welcome to the community!",
+          Createdby: uid,
+          Title: "Welcome"});
 
         const chatRef = collection(db, "Communities", docRef.id, "chat");
         await addDoc(chatRef, {});
