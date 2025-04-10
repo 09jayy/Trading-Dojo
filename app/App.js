@@ -26,7 +26,7 @@ import { LeaderView } from './screens/Community/LeaderCommunity';
 import { LeaderJoined } from './screens/Community/LeaderJoined';
 import { LeaderPosts } from './screens/Community/CommunityPages/LeaderPosts';
 import MaterialIcons from '@expo/vector-icons/MaterialIcons';
-
+import { CommunityRoot } from './screens/Community/CommunityRoot';
 
 const Tab = createBottomTabNavigator();
 const Stack = createNativeStackNavigator(); 
@@ -162,8 +162,7 @@ const MainTabs = () => (
   >
     <Tab.Screen name="Investments" component={Dashboard} />
     <Tab.Screen name="Stock Market" component={StockMarket} />
-    <Tab.Screen name="Communities" component={CommunityView} />
-    <Tab.Screen name="Joined Communities" component={JoinedCommunities} />
+    <Tab.Screen name='Communities' component={CommunityRoot}/>
     <Tab.Screen name="Profile" component={Profile} />
   </Tab.Navigator>
 );
