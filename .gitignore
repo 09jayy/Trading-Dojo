@@ -42,3 +42,5 @@ yarn-error.*
 serviceAccountKey.json
 
 stockapicaller-test.js
+
+.vscode/
