@@ -7,7 +7,7 @@ A Paper Trading application focused on learning the fundamentals of stocks and s
 ![Expo Badge](https://img.shields.io/badge/expo-grey?style=for-the-badge&logo=Expo)
 ![Firebase Badge](https://img.shields.io/badge/Firebase-red?style=for-the-badge&logo=firebase)
 ![Node.JS Badge](https://img.shields.io/badge/Node.js-5FA04E?style=for-the-badge&logo=node.js&logoColor=white)
-![ExpressJS Badge](https://img.shields.io/badge/Express.JS-black?style=for-the-badge&logo=firebase)
+![ExpressJS Badge](https://img.shields.io/badge/Express.JS-black?style=for-the-badge&logo=express)
 
 ![GitHub contributors](https://img.shields.io/github/contributors/09jayy/Trading-Dojo)
 ![GitHub Created At](https://img.shields.io/github/created-at/09jayy/Trading-Dojo)
